@@ -13,13 +13,13 @@ Cursor::~Cursor() {
 }
 /**
 * Cursor를 한칸 이동하는 함수
-* @param const char command 상 'h'  하 'l'  좌 'j'  우 'k'
+* @param const char command 커서의 방향
 * @param const int row_size 전체 행 크기
 * @return int 성공 0 실패 1
 */
 int Cursor::moveCursor(const char command, const int row_size) {
     switch (command) {
-    case 'h':	//커서 위로 이동
+    case 'k':	//커서 위로 이동
         if (this->row_idx > 0) {
             if (this->row_idx == this->scroll_up)
                 --scroll_up, --scroll_down;
@@ -42,7 +42,7 @@ int Cursor::moveCursor(const char command, const int row_size) {
         }
         break;
 
-    case 'j':	//커서 왼쪽으로 이동
+    case 'h':	//커서 왼쪽으로 이동
         if (this->col_idx != 0 && this->col_idx == this->scroll_left)
             --scroll_left, --scroll_right;
         if (this->col_idx > 0) {
@@ -51,7 +51,7 @@ int Cursor::moveCursor(const char command, const int row_size) {
         }
         break;
 
-    case 'k':	//커서 오른쪽으로 이동
+    case 'l':	//커서 오른쪽으로 이동
         if (this->col_idx < (*this->row).size()) {
             if (this->col_idx == this->scroll_right)
                 ++scroll_left, ++scroll_right;
@@ -60,7 +60,7 @@ int Cursor::moveCursor(const char command, const int row_size) {
         }
         break;
 
-    case 'l':	//커서 아래로 이동
+    case 'j':	//커서 아래로 이동
         if (this->row_idx < row_size - 1) {
             if (this->row_idx == this->scroll_down)
                 ++scroll_up, ++scroll_down;
