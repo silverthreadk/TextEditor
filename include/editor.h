@@ -5,11 +5,19 @@
 
 class Cursor;
 
+enum MODE {
+    MODE_COMMAND = 0,
+    MODE_INSERT,
+    MODE_LAST_LINE,
+    MODE_END,
+    MODE_SAVE
+};
 
 class Editor {
 private:
 	Cursor* cp;	//현재 커서 정보
 	std::list<std::list<char> > text_list;	//작성된 문자 리스트
+    MODE mode;
 
 	const char* filepath;	//현재 파일 경로
 
@@ -36,7 +44,11 @@ public:
 	int deleteLine();
 	int backspace();
 	
+    //setter
+    void setMode(MODE mode) { this->mode = mode; }
+
 	//getter
+    MODE getMode() { return mode; }
 	Cursor* getCursor();
 	int getRowSize();
 	const char* getFilepath();

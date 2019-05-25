@@ -11,6 +11,7 @@ using namespace std;
 Editor::Editor() {
 	this->cp = new Cursor();
 	this->filepath = "";
+    mode = MODE_COMMAND;
 }
 
 Editor::~Editor() {
@@ -49,7 +50,7 @@ int Editor::editFile(const char* filepath) {
 	}
 	else {
 		while (fscanf(fp, "%c", &c) != EOF) {
-			if (c == '\n') {
+			if (c == '\n' || c == '\r') {
 				text_list.push_back(temp);
 				temp.clear();
 			} else {
@@ -150,6 +151,7 @@ int Editor::writeFile(const char* filepath) {
 * @return int 성공 0, 실패 0 이외의 값
 */
 int Editor::printEditor() {
+    system("cls");
     list<list<char> >::iterator row;
     list<char>::iterator col;
 
@@ -188,7 +190,7 @@ int Editor::printEditor() {
             for (; col_idx < scroll_right && col != (*row).end(); ++col_idx, ++col) {
                 if (this->cp->getColIndex() == col_idx)
                     printf("|");
-                printf("%c", *(col));
+                else printf("%c", *(col));
             }
             if (this->cp->getColIndex() == col_idx || this->cp->getColIndex() == scroll_right)
                 printf("|");
@@ -215,6 +217,9 @@ int Editor::printEditor() {
         printf("\n");
     //printf("scroll : %d, %d, %d, %d, cursor: %d, %d\n", this->cp->getScrollUp(), this->cp->getScrollDown(), this->cp->getScrollLeft(), scroll_right, this->cp->getRowIndex(), this->cp->getColIndex());
 
+    if (mode == MODE_LAST_LINE) {
+        printf(":");
+    }
     return 0;
 }
 /**
