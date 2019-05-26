@@ -4,10 +4,10 @@ Cursor::Cursor() {
 	row_idx=0;
 	col_idx=0;
 	
-	scroll_up = SCROLL_UP;
-	scroll_down = SCROLL_DOWN;
-	scroll_left= SCROLL_LEFT;
-	scroll_right= SCROLL_RIGHT;
+	scroll_up = WINDOW_TOP;
+	scroll_down = WINDOW_BOTTOM;
+	scroll_left= WINDOW_LEFT;
+	scroll_right= WINDOW_RIGHT;
 }
 Cursor::~Cursor() {
 }
@@ -30,11 +30,11 @@ int Cursor::moveCursor(const char command, const int row_size) {
             if (col_idx >= (*this->row).size()) {
                 this->col_idx = scroll_right = (*this->row).size();
                 this->col = (*this->row).end();
-                if ((*this->row).size() > SCROLL_RIGHT) {
+                if ((*this->row).size() > WINDOW_RIGHT) {
                     scroll_right = (*this->row).size();
-                    scroll_left = scroll_right - SCROLL_RIGHT;
+                    scroll_left = scroll_right - WINDOW_RIGHT;
                 } else
-                    scroll_left = SCROLL_LEFT, scroll_right = SCROLL_RIGHT;
+                    scroll_left = WINDOW_LEFT, scroll_right = WINDOW_RIGHT;
             } else {
                 this->col = (*this->row).begin();
                 for (int i = 0; i < col_idx && (*this->row).end() != this->col; ++i, ++this->col);
@@ -71,11 +71,11 @@ int Cursor::moveCursor(const char command, const int row_size) {
             if (col_idx >= (*this->row).size()) {
                 this->col_idx = scroll_right = (*this->row).size();
                 this->col = (*this->row).end();
-                if ((*this->row).size() > SCROLL_RIGHT) {
+                if ((*this->row).size() > WINDOW_RIGHT) {
                     scroll_right = (*this->row).size();
-                    scroll_left = scroll_right - SCROLL_RIGHT;
+                    scroll_left = scroll_right - WINDOW_RIGHT;
                 } else
-                    scroll_left = SCROLL_LEFT, scroll_right = SCROLL_RIGHT;
+                    scroll_left = WINDOW_LEFT, scroll_right = WINDOW_RIGHT;
             } else {
                 this->col = (*this->row).begin();
                 for (int i = 0; i < col_idx && (*this->row).end() != this->col; ++i, ++this->col);
@@ -101,16 +101,16 @@ int Cursor::moveRow(int n, const int row_size){
         for (; this->row_idx < n && this->row_idx<row_size - 1; ++(this->row_idx), ++(this->row));
 
         if (row_idx > scroll_down)
-            scroll_down = row_idx, scroll_up = row_idx - SCROLL_DOWN;
+            scroll_down = row_idx, scroll_up = row_idx - WINDOW_BOTTOM;
     } else if (n < this->row_idx) {
         for (; this->row_idx > n; --(this->row_idx), --(this->row));
 
         if (row_idx < scroll_up)
-            scroll_down = row_idx + SCROLL_DOWN, scroll_up = row_idx;
+            scroll_down = row_idx + WINDOW_BOTTOM, scroll_up = row_idx;
     }
 
-    scroll_left = SCROLL_LEFT, scroll_right = SCROLL_RIGHT;
-    this->col_idx = SCROLL_LEFT;
+    scroll_left = WINDOW_LEFT, scroll_right = WINDOW_RIGHT;
+    this->col_idx = WINDOW_LEFT;
     this->col = (*this->row).begin();
 
     return 0;
@@ -129,12 +129,12 @@ int Cursor::moveCol(int n) {
         for (; this->col_idx < n; ++(this->col_idx), ++(this->col));
 
         if (col_idx > scroll_right)
-            scroll_right = col_idx, scroll_left = col_idx - SCROLL_RIGHT;
+            scroll_right = col_idx, scroll_left = col_idx - WINDOW_RIGHT;
     } else if (n < this->col_idx) {
         for (; this->col_idx > n; --(this->col_idx), --(this->col));
 
         if (col_idx < scroll_left)
-            scroll_right = col_idx + SCROLL_RIGHT, scroll_left = col_idx;
+            scroll_right = col_idx + WINDOW_RIGHT, scroll_left = col_idx;
     }
 
     return 0;

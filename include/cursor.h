@@ -3,10 +3,10 @@
 
 #include <list>
 
-#define SCROLL_UP 0
-#define SCROLL_DOWN 19
-#define SCROLL_LEFT 0
-#define SCROLL_RIGHT 69
+#define WINDOW_TOP 0
+#define WINDOW_BOTTOM 19
+#define WINDOW_LEFT 0
+#define WINDOW_RIGHT 69
 
 using namespace std;
 

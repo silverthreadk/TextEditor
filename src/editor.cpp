@@ -152,68 +152,33 @@ int Editor::writeFile(const char* filepath) {
 */
 int Editor::printEditor() {
     system("cls");
-    list<list<char> >::iterator row;
-    list<char>::iterator col;
-
-    int row_idx;
-    int col_idx;
-
-    int scroll_right = this->cp->getScrollRight();
 
     printf("------------------------------------------------------------------------\n");
     printf("filepath : %s\n", this->filepath);
     printf("------------------------------------------------------------------------\n");
 
     //행 인덱스 맞추기
-    row_idx = this->cp->getScrollUp();
-    row = text_list.begin();
+    int row_idx = this->cp->getScrollUp();
+    list<list<char> >::iterator row = text_list.begin();
 
-    if (row_idx > 0)
-        for (int i = 0; i < row_idx; ++i, ++row);
+    std::advance(row, row_idx);
 
     for (; row_idx <= this->cp->getScrollDown() && row != text_list.end(); ++row_idx, ++row) {
-        // 커서 있는 행
-        if (this->cp->getRowIndex() == row_idx) {
-
-            //열 인덱스 맞추기
-            col_idx = this->cp->getScrollLeft();
-            col = (*row).begin();
-
-            if (col_idx > 0) {
-                for (int i = 0; i < col_idx; ++i, ++col);
-                printf("-");
-            }
-            else
-                printf(" ");
-
-            //출력
-            for (; col_idx < scroll_right && col != (*row).end(); ++col_idx, ++col) {
-                if (this->cp->getColIndex() == col_idx)
-                    printf("|");
-                else printf("%c", *(col));
-            }
-            if (this->cp->getColIndex() == col_idx || this->cp->getColIndex() == scroll_right)
-                printf("|");
-            if (scroll_right < (*row).size())
-                printf("-");
+        printf(" ");
+        int col_idx = 0;
+        list<char>::iterator col = (*row).begin();
+        for (; col != (*row).end(); ++col_idx, ++col) {
+            if (row_idx == cp->getRowIndex() && col_idx == this->cp->getColIndex()) printf("|");
+            else printf("%c", *(col));
         }
+        if (row_idx == cp->getRowIndex() && col_idx == this->cp->getColIndex()) printf("|");
 
-        //커서가 없는 행
-        else {
-            printf(" ");
-            col_idx = 0;
-            for (col = (*row).begin(); col_idx < SCROLL_RIGHT + 1 && col != (*row).end(); ++col_idx, ++col) {
-                printf("%c", *(col));
-            }
-            if (col != (*row).end())
-                printf("-");
-        }
         printf("\n");
     }
 
 
     //여백
-    for (int i = 0; i <= SCROLL_DOWN - (int)text_list.size(); ++i)
+    for (int i = 0; i <= WINDOW_BOTTOM - (int)text_list.size(); ++i)
         printf("\n");
     //printf("scroll : %d, %d, %d, %d, cursor: %d, %d\n", this->cp->getScrollUp(), this->cp->getScrollDown(), this->cp->getScrollLeft(), scroll_right, this->cp->getRowIndex(), this->cp->getColIndex());
 
@@ -268,8 +233,8 @@ int Editor::insertLine() {
     this->cp->incRowIndex();
     this->cp->setColIndex(0);
 
-    if (this->cp->getScrollLeft() > SCROLL_LEFT)
-        this->cp->setScrollLeft(SCROLL_LEFT), this->cp->setScrollRight(SCROLL_RIGHT);
+    if (this->cp->getScrollLeft() > WINDOW_LEFT)
+        this->cp->setScrollLeft(WINDOW_LEFT), this->cp->setScrollRight(WINDOW_RIGHT);
 
     return 0;
 }
@@ -281,7 +246,7 @@ int Editor::deleteLine() {
     list<char> temp;
 
     if ((this->cp->getRow()) != (this->text_list).end()) {
-        if (this->cp->getScrollDown()>SCROLL_DOWN) {
+        if (this->cp->getScrollDown()>WINDOW_BOTTOM) {
             this->cp->decScrollDown();
             this->cp->decScrollUp();
         }
@@ -324,15 +289,15 @@ int Editor::backspace() {
         this->cp->setColIndex((*this->cp->getRow()).size());
 
         //화면 표시 조정
-        if ((*this->cp->getRow()).size() > SCROLL_RIGHT) {
+        if ((*this->cp->getRow()).size() > WINDOW_RIGHT) {
             this->cp->setScrollRight((*this->cp->getRow()).size() + 1);
-            this->cp->setScrollLeft(this->cp->getScrollRight() - SCROLL_RIGHT);
+            this->cp->setScrollLeft(this->cp->getScrollRight() - WINDOW_RIGHT);
         } else {
-            this->cp->setScrollRight(SCROLL_RIGHT);
-            this->cp->setScrollLeft(SCROLL_LEFT);
+            this->cp->setScrollRight(WINDOW_RIGHT);
+            this->cp->setScrollLeft(WINDOW_LEFT);
         }
 
-        if (this->cp->getScrollDown()>SCROLL_DOWN) {
+        if (this->cp->getScrollDown()>WINDOW_BOTTOM) {
             this->cp->decScrollDown();
             this->cp->decScrollUp();
         }
@@ -349,7 +314,7 @@ int Editor::backspace() {
         else
             this->cp->setCol((*this->cp->getRow()).begin());
     } else if ((*this->cp->getRow()).begin() != this->cp->getCol()) {// 열 지울 때
-        if (this->cp->getScrollLeft()>SCROLL_LEFT) {
+        if (this->cp->getScrollLeft()>WINDOW_LEFT) {
             this->cp->decScrollLeft();
             this->cp->decScrollRight();
         }
