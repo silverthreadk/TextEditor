@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
                 editor->writeFile();
             } else {
                 editor->setMode(MODE_COMMAND);
+                ch = 0;
             }
         } else {
             ch = getch();
