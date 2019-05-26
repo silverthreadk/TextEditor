@@ -4,9 +4,48 @@
 #include <stdio.h>
 #include <list>
 
+#ifdef WINDOWS
+#include <windows.h>
+#else
+#include <sys/ioctl.h>
+#endif
+
 #include "cursor.h"
 
 using namespace std;
+
+
+void static clearScreen() {
+#ifdef WINDOWS
+    std::system("cls");
+#else
+    std::system("clear");
+#endif
+}
+
+int static getScreenSize() {
+#ifdef WINDOWS
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    int rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1 ;
+    return rows;
+#else
+    struct winsize max;
+    ioctl(0, TIOCGWINSZ, &max);
+    return max;
+#endif
+}
+
+int static getConsoleCursor() {
+#ifdef WINDOWS
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return csbi.dwCursorPosition.Y;
+#else
+#endif
+}
 
 Editor::Editor() {
 	this->cp = new Cursor();
@@ -146,24 +185,29 @@ int Editor::writeFile(const char* filepath) {
 
 	return 0;
 }
+
+
 /**
 * 편집 화면을 출력하는 함수
 * @return int 성공 0, 실패 0 이외의 값
 */
 int Editor::printEditor() {
-    system("cls");
+    clearScreen();
 
-    printf("------------------------------------------------------------------------\n");
-    printf("filepath : %s\n", this->filepath);
-    printf("------------------------------------------------------------------------\n");
+    //printf("------------------------------------------------------------------------\n");
+    //printf("filepath : %s\n", this->filepath);
+    //printf("------------------------------------------------------------------------\n");
 
     //행 인덱스 맞추기
     int row_idx = this->cp->getScrollUp();
     list<list<char> >::iterator row = text_list.begin();
 
+
+    int screen_size = getScreenSize();
     std::advance(row, row_idx);
 
-    for (; row_idx <= this->cp->getScrollDown() && row != text_list.end(); ++row_idx, ++row) {
+    for (; screen_size - getConsoleCursor() - 1 > 0 && row != text_list.end(); ++row_idx, ++row) {
+        printf("%d", row_idx);
         printf(" ");
         int col_idx = 0;
         list<char>::iterator col = (*row).begin();
@@ -178,7 +222,8 @@ int Editor::printEditor() {
 
 
     //여백
-    for (int i = 0; i <= WINDOW_BOTTOM - (int)text_list.size(); ++i)
+    int padding = screen_size - getConsoleCursor() - 1;
+    for (int i = 0; i < padding; ++i)
         printf("\n");
     //printf("scroll : %d, %d, %d, %d, cursor: %d, %d\n", this->cp->getScrollUp(), this->cp->getScrollDown(), this->cp->getScrollLeft(), scroll_right, this->cp->getRowIndex(), this->cp->getColIndex());
 
