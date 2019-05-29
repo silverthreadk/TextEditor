@@ -3,7 +3,6 @@
 #include <conio.h>
 
 #include "editor.h"
-#include "cursor.h"
 
 using namespace std;
 
@@ -70,7 +69,7 @@ int main(int argc, char** argv) {
             case 'j':    // key down
             case 'l':    // key right
             case 'h':    // key left
-                editor->getCursor()->moveCursor(ch, editor->getRowSize());
+                editor->moveCursor(ch);
                 break;
             }
         } else if (editor->getMode() == MODE_INSERT) {

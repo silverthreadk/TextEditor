@@ -169,6 +169,11 @@ int Editor::printEditor() {
     }
     return 0;
 }
+
+int Editor::moveCursor(const char c) {
+    return cp->move(c, this->text_list.size());
+}
+
 /**
 * 현재 커서에서 문자를 추가하는 함수
 * @param const char c
@@ -249,14 +254,6 @@ int Editor::deleteLine() {
     return 0;
 }
 
-
-Cursor* Editor::getCursor() {
-	return this->cp;
-}
-
-int Editor::getRowSize() {
-	return this->text_list.size();
-}
 
 const char* Editor::getFilepath() {
 	return this->filepath;

@@ -34,6 +34,8 @@ public:
 
 	int printEditor();
 
+    int moveCursor(const char c);
+
 	int insertChar(const char c);
 	int deleteChar();
 	int insertLine();
@@ -44,7 +46,6 @@ public:
 
 	//getter
     MODE getMode() { return mode; }
-	Cursor* getCursor();
 	int getRowSize();
 	const char* getFilepath();
 

@@ -19,7 +19,7 @@ Cursor::~Cursor() {
 * @param const int row_size 전체 행 크기
 * @return int 성공 0 실패 1
 */
-int Cursor::moveCursor(const char command, const int row_size) {
+int Cursor::move(const char command, const int row_size) {
     switch (command) {
     case 'k':   //top
         if (this->row_idx > 0) {
