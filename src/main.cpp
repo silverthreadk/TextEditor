@@ -31,13 +31,16 @@ int main(int argc, char** argv) {
             std:cin >> command;
             if (command.compare("q") == 0) {
                 editor->setMode(MODE_END);
-            } else if (command.compare("wq") == 0) {
-                editor->setMode(MODE_SAVE);
+                break;
+            } else if (command.compare("w") == 0) {
                 editor->writeFile();
-            } else {
-                editor->setMode(MODE_COMMAND);
-                ch = 0;
+            } else if (command.compare("wq") == 0) {
+                editor->setMode(MODE_END);
+                editor->writeFile();
+                break;
             }
+            editor->setMode(MODE_COMMAND);
+            ch = 0;
         } else {
             ch = getch();
         }

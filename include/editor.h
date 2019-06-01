@@ -9,8 +9,7 @@ enum MODE {
     MODE_COMMAND = 0,
     MODE_INSERT,
     MODE_LAST_LINE,
-    MODE_END,
-    MODE_SAVE
+    MODE_END
 };
 
 class Editor {
