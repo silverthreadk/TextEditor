@@ -21,8 +21,6 @@ public:
 	~Cursor();
 
 	int move(const char command, const int row_size);
-	int moveRow(int n, const int row_size);
-	int moveCol(int n);
 
     void scrollUp();
     void scrollDown();

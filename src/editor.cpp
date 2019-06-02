@@ -17,54 +17,27 @@ using namespace std;
 
 
 
-
-Editor::Editor() {
-	this->filepath = "";
-    mode = MODE_COMMAND;
-
-    editNewFile();
-}
-
 Editor::Editor(const char* filepath) {
-    this->filepath = "";
+    this->filepath = filepath;
     mode = MODE_COMMAND;
 
-    editFile(filepath);
+    editFile();
 }
 
 Editor::~Editor() {
 	delete cp;
 }
-/**
-* 새 파일을 편집하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
-int Editor::editNewFile() {
-    list<char> temp;
 
-    text_list.push_back(temp);
-
-    this->cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
-
-	return 0;
-}
-/**
-* 파일 경로에 있는 파일을 편집하는 함수
-* @param const char* filepath 파일 경로
-* @return int 성공 0, 실패 0 이외의 값
-*/
-int Editor::editFile(const char* filepath) {
+int Editor::editFile() {
 	FILE* fp;
 	char c;
 	list<char> temp;
-	this->filepath = filepath;
 
 	if ((fp = fopen(this->filepath, "r")) == NULL) {
 		text_list.push_back(temp);
 
         this->cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
-	}
-	else {
+	} else {
 		while (fscanf(fp, "%c", &c) != EOF) {
 			if (c == '\n' || c == '\r') {
 				text_list.push_back(temp);
@@ -82,10 +55,7 @@ int Editor::editFile(const char* filepath) {
 	return 0;
 }
 
-/**
-* 기존 파일 경로에서 파일을 저장하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
+
 int Editor::writeFile() {
 	FILE *fp;
 	Cursor* cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
@@ -105,11 +75,7 @@ int Editor::writeFile() {
 
 	return 0;
 }
-/**
-* 새 파일경로에 파일을 저장하는 함수
-* @param const char* filepath 파일 경로
-* @return int 성공 0, 실패 0 이외의 값
-*/
+
 int Editor::writeFile(const char* filepath) {
 	FILE *fp;
 	this->filepath = filepath;
@@ -131,10 +97,6 @@ int Editor::writeFile(const char* filepath) {
 }
 
 
-/**
-* 편집 화면을 출력하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
 int Editor::printEditor() {
     clearScreen();
 
@@ -174,21 +136,13 @@ int Editor::moveCursor(const char c) {
     return cp->move(c, this->text_list.size());
 }
 
-/**
-* 현재 커서에서 문자를 추가하는 함수
-* @param const char c
-* @return int 성공 0, 실패 0 이외의 값
-*/
-int Editor::insertChar(const char c) {
+int Editor::appendChar(const char c) {
     this->cp->setCol(++(*this->cp->getRow()).insert(this->cp->getCol(), c));
     this->cp->incColIndex();
 
     return 0;
 }
-/**
-* 현재 커서에서 문자를 제거하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
+
 int Editor::deleteChar() {
     if ((this->cp->getCol()) != (*this->cp->getRow()).end()) {
         this->cp->setCol((*this->cp->getRow()).erase(this->cp->getCol()));
@@ -198,10 +152,7 @@ int Editor::deleteChar() {
 
     return 0;
 }
-/**
-* 현재 커서에서 개행하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
+
 int Editor::insertLine() {
     list<char> temp;
 
@@ -219,10 +170,7 @@ int Editor::insertLine() {
 
     return 0;
 }
-/**
-* 현재 커서에서 라인을 삭제하는 함수
-* @return int 성공 0, 실패 0 이외의 값
-*/
+
 int Editor::deleteLine() {
     list<char> temp;
 
@@ -252,9 +200,4 @@ int Editor::deleteLine() {
     }
 
     return 0;
-}
-
-
-const char* Editor::getFilepath() {
-	return this->filepath;
 }

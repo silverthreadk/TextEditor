@@ -20,8 +20,7 @@ int main(int argc, char** argv) {
         return 0;
 	} else {
 		strcpy(filepath, argv[1]);
-		editor = new Editor();
-		editor->editFile(filepath);
+		editor = new Editor(filepath);
 	}
 	editor->printEditor();
     getch();
@@ -76,7 +75,7 @@ int main(int argc, char** argv) {
                 break;
             }
         } else if (editor->getMode() == MODE_INSERT) {
-            editor->insertChar(ch);
+            editor->appendChar(ch);
         }
         editor->printEditor();
 	}

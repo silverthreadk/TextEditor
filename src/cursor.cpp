@@ -13,12 +13,7 @@ Cursor::Cursor(list<list<char> >::iterator row, list<char>::iterator col) {
 }
 Cursor::~Cursor() {
 }
-/**
-* Cursor를 한칸 이동하는 함수
-* @param const char command 커서의 방향
-* @param const int row_size 전체 행 크기
-* @return int 성공 0 실패 1
-*/
+
 int Cursor::move(const char command, const int row_size) {
     switch (command) {
     case 'k':   //top
