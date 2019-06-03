@@ -17,6 +17,7 @@ private:
 	Cursor* cp;
 	std::list<std::list<char> > text_list;
     MODE mode;
+    bool line_number;
 
 	const char* filepath;
 
@@ -84,6 +85,7 @@ public:
 	
     //setter
     void setMode(MODE mode) { this->mode = mode; }
+    void setLineNumber(bool line_number) { this->line_number = line_number; }
 
 	//getter
     MODE getMode() { return mode; }

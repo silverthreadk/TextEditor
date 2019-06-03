@@ -18,8 +18,10 @@ using namespace std;
 
 
 Editor::Editor(const char* filepath) {
-    this->filepath = filepath;
+    cp = NULL;
     mode = MODE_COMMAND;
+    line_number = false;
+    this->filepath = filepath;
 
     editFile();
 }
@@ -100,17 +102,16 @@ int Editor::writeFile(const char* filepath) {
 int Editor::printEditor() {
     clearScreen();
 
-    //printf("------------------------------------------------------------------------\n");
-    //printf("filepath : %s\n", this->filepath);
-    //printf("------------------------------------------------------------------------\n");
-
     int screen_size = getScreenSize();
     list<list<char> >::iterator row = cp->getScrollPosition().first;
     int row_idx = cp->getScrollPosition().second;
 
     for (; screen_size - getConsoleCursor() - 1 > 0 && row != text_list.end(); ++row_idx, ++row) {
-        printf("%d", row_idx);
-        printf(" ");
+        if (line_number) {
+            const int digit_number = log10(text_list.size()) + 1;
+            printf("%*d ", digit_number, row_idx + 1);
+        }
+
         int col_idx = 0;
         list<char>::iterator col = (*row).begin();
         for (; col != (*row).end(); ++col_idx, ++col) {

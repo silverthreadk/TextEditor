@@ -7,12 +7,10 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-	//입력
-	char filepath[200];	//파일 경로
-	char ch = 0;	//삽입할 문자
-	int number;	//이동할 행, 열 숫자
+	char filepath[200];
+	char ch = 0;
+	int number;
 
-	//에디터
 	Editor* editor;
 
 	if (argv[1] == NULL) {
@@ -27,16 +25,21 @@ int main(int argc, char** argv) {
 	while (editor->getMode() < MODE_END) {
         if (editor->getMode() == MODE_LAST_LINE) {
             string command;
-            std:cin >> command;
-            if (command.compare("q") == 0) {
+            getline(cin, command);
+            
+            if (command == "q") {
                 editor->setMode(MODE_END);
                 break;
-            } else if (command.compare("w") == 0) {
+            } else if (command == "w") {
                 editor->writeFile();
-            } else if (command.compare("wq") == 0) {
+            } else if (command == "wq") {
                 editor->setMode(MODE_END);
                 editor->writeFile();
                 break;
+            } else if (command == "set nu" || command == "set number") {
+                editor->setLineNumber(true);
+            } else if (command == "set nonumber") {
+                editor->setLineNumber(false);
             }
             editor->setMode(MODE_COMMAND);
             ch = 0;
