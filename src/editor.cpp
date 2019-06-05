@@ -169,6 +169,8 @@ int Editor::insertLine() {
     this->cp->incRowIndex();
     this->cp->setColIndex(0);
 
+    mode = MODE_INSERT;
+
     return 0;
 }
 
