@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
+#include <regex>
 
 #include "editor.h"
 
@@ -13,6 +14,9 @@ int main(int argc, char** argv) {
 
 	Editor* editor;
 
+    smatch m;
+    regex pattern("(\\w)\\s?([\\W*\\w*]*)?");
+
 	if (argv[1] == NULL) {
         printf("Input filename");
         return 0;
@@ -24,21 +28,27 @@ int main(int argc, char** argv) {
     getch();
 	while (editor->getMode() < MODE_END) {
         if (editor->getMode() == MODE_LAST_LINE) {
-            string command;
-            getline(cin, command);
-            
-            if (command == "q") {
+            string input, command1, command2, str;
+            getline(cin, input);
+            if (regex_match(input, m, pattern)) {
+                command1 = m[0].str();
+                command2 = (m[0].str() == m[1].str()) ? "" : m[1].str();
+                str = m[2].str();
+            }
+            if (command1 == "q") {
                 editor->setMode(MODE_END);
                 break;
-            } else if (command == "w") {
+            } else if (command1 == "w") {
                 editor->writeFile();
-            } else if (command == "wq") {
+            } else if (command2 == "w") {
+                editor->writeFile(str.c_str());
+            } else if (command1 == "wq") {
                 editor->setMode(MODE_END);
                 editor->writeFile();
                 break;
-            } else if (command == "set nu" || command == "set number") {
+            } else if (command1 == "set nu" || command1 == "set number") {
                 editor->setLineNumber(true);
-            } else if (command == "set nonumber") {
+            } else if (command1 == "set nonumber") {
                 editor->setLineNumber(false);
             }
             editor->setMode(MODE_COMMAND);
