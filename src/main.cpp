@@ -24,12 +24,13 @@ int main(int argc, char** argv) {
 		strcpy(filepath, argv[1]);
 		editor = new Editor(filepath);
 	}
-	editor->printEditor();
-    getch();
+
 	while (editor->getMode() < MODE_END) {
+        editor->printEditor();
         if (editor->getMode() == MODE_LAST_LINE) {
             string input, command1, command2, str;
             getline(cin, input);
+
             if (regex_match(input, m, pattern)) {
                 command1 = m[0].str();
                 command2 = (m[0].str() == m[1].str()) ? "" : m[1].str();
@@ -53,12 +54,8 @@ int main(int argc, char** argv) {
             }
             editor->setMode(MODE_COMMAND);
             ch = 0;
-        } else {
-            ch = getch();
-        }
-        if (ch == 27) { // ESC
-            editor->setMode(MODE_COMMAND);
         } else if (editor->getMode() == MODE_COMMAND) {
+            ch = getch();
             switch (ch) {
             case ':': {
                 editor->setMode(MODE_LAST_LINE);
@@ -88,9 +85,13 @@ int main(int argc, char** argv) {
                 break;
             }
         } else if (editor->getMode() == MODE_INSERT) {
-            editor->appendChar(ch);
+            ch = getch();
+            if (ch == 27) { // ESC
+                editor->setMode(MODE_COMMAND);
+            } else {
+                editor->appendChar(ch);
+            }
         }
-        editor->printEditor();
 	}
 
 	return 0;
