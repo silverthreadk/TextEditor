@@ -157,13 +157,8 @@ int Editor::deleteChar() {
 int Editor::insertLine() {
     list<char> temp;
 
-    while ((this->cp->getCol()) != (*this->cp->getRow()).end()) {
-        temp.push_back(*(this->cp->getCol()));
-        this->cp->setCol((*this->cp->getRow()).erase(this->cp->getCol()));
-    }
     cp->scrollDown();
 
-    this->cp->incRow();
     this->cp->setRow(text_list.insert(this->cp->getRow(), temp));
     this->cp->setCol((*this->cp->getRow()).begin());
     this->cp->incRowIndex();
