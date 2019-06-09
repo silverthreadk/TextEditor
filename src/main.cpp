@@ -73,6 +73,10 @@ int main(int argc, char** argv) {
                 editor->insertLine();
                 break;
             }
+            case 'O': {
+                editor->insertLineBefore();
+                break;
+            }
             case 'd': {
                 editor->deleteLine();
                 break;

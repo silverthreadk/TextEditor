@@ -78,6 +78,12 @@ public:
 	int insertLine();
 
     /**
+     * Insert new line in front of the current line and add text there
+     * @return          0 if the operation succeeded
+     */
+    int insertLineBefore();
+
+    /**
      * Delete the current line.
      * @return          0 if the operation succeeded
      */

@@ -170,6 +170,16 @@ int Editor::insertLine() {
     return 0;
 }
 
+int Editor::insertLineBefore() {
+    list<char> temp;
+
+    text_list.insert(this->cp->getRow(), temp);
+    cp->incRowIndex();
+    cp->setCol((*this->cp->getRow()).begin());
+    cp->setColIndex(0);
+
+    moveCursor('k');
+
     mode = MODE_INSERT;
 
     return 0;
