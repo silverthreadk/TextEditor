@@ -159,10 +159,16 @@ int Editor::insertLine() {
 
     cp->scrollDown();
 
-    this->cp->setRow(text_list.insert(this->cp->getRow(), temp));
-    this->cp->setCol((*this->cp->getRow()).begin());
-    this->cp->incRowIndex();
-    this->cp->setColIndex(0);
+    cp->incRow();
+    cp->setRow(text_list.insert(this->cp->getRow(), temp));
+    cp->incRowIndex();
+    cp->setCol((*cp->getRow()).begin());
+    cp->setColIndex(0);
+
+    mode = MODE_INSERT;
+
+    return 0;
+}
 
     mode = MODE_INSERT;
 

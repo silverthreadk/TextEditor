@@ -72,7 +72,7 @@ public:
 	int deleteChar();
 
     /**
-     * Append new line following the current line and add character there.
+     * Insert new line following the current line and add character there.
      * @return          0 if the operation succeeded
      */
 	int insertLine();
