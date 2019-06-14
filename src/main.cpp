@@ -10,6 +10,7 @@ using namespace std;
 int main(int argc, char** argv) {
 	char filepath[200];
 	char ch = 0;
+    char prev_ch = 0;
 	int number;
 
 	Editor* editor;
@@ -82,7 +83,12 @@ int main(int argc, char** argv) {
                 break;
             }
             case 'd': {
-                editor->deleteLine();
+                if (prev_ch == 'd') {
+                    editor->deleteLine();
+                    prev_ch = 0;
+                } else {
+                    prev_ch = ch;
+                }
                 break;
             }
             case 'k':    // key up
