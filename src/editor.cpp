@@ -133,6 +133,13 @@ int Editor::printEditor() {
     return 0;
 }
 
+int Editor::moveCursorToBeginning() {
+    cp->setCol(cp->getRow()->begin());
+    cp->setColIndex(0);
+
+    return 0;
+}
+
 int Editor::moveCursor(const char c) {
     return cp->move(c, this->text_list.size());
 }

@@ -60,6 +60,12 @@ public:
     int moveCursor(const char c);
 
     /**
+     * Move cursor to the beginning of current line.
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToBeginning();
+
+    /**
      * Append character following current cursor position.
      * @param c         character to append
      * @return          0 if the operation succeeded
