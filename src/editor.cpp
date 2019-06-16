@@ -133,6 +133,10 @@ int Editor::printEditor() {
     return 0;
 }
 
+int Editor::moveCursor(const char c) {
+    return cp->move(c, this->text_list.size());
+}
+
 int Editor::moveCursorToBeginning() {
     cp->setCol(cp->getRow()->begin());
     cp->setColIndex(0);
@@ -140,8 +144,11 @@ int Editor::moveCursorToBeginning() {
     return 0;
 }
 
-int Editor::moveCursor(const char c) {
-    return cp->move(c, this->text_list.size());
+int Editor::moveCursorToEnd() {
+    cp->setCol(cp->getRow()->end());
+    cp->setColIndex(cp->getRow()->size());
+
+    return 0;
 }
 
 int Editor::appendChar(const char c) {

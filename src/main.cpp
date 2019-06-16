@@ -93,6 +93,11 @@ int main(int argc, char** argv) {
             }
             case '0': {
                 editor->moveCursorToBeginning();
+                break;
+            }
+            case '$': {
+                editor->moveCursorToEnd();
+                break;
             }
             case 'k':    // key up
             case 'j':    // key down

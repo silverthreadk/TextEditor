@@ -66,6 +66,12 @@ public:
     int moveCursorToBeginning();
 
     /**
+     * Move cursor to the end of current line
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToEnd();
+
+    /**
      * Append character following current cursor position.
      * @param c         character to append
      * @return          0 if the operation succeeded
