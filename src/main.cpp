@@ -63,7 +63,8 @@ int main(int argc, char** argv) {
                 break;
             }
             case 'a': {
-                editor->setMode(MODE_APPEND);
+                editor->moveCursor('l');
+                editor->setMode(MODE_INSERT);
                 break;
             }
             case 'i': {
@@ -106,13 +107,11 @@ int main(int argc, char** argv) {
                 editor->moveCursor(ch);
                 break;
             }
-        } else if (editor->isTextEntryMode()) {
+        } else if (editor->getMode() == MODE_INSERT) {
             ch = getch();
             if (ch == 27) { // ESC
                 editor->setMode(MODE_COMMAND);
-            } else if (editor->getMode() == MODE_APPEND) {
-                editor->appendChar(ch);
-            } else if (editor->getMode() == MODE_INSERT) {
+            } else {
                 editor->insertChar(ch);
             }
         }

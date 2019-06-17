@@ -151,12 +151,6 @@ int Editor::moveCursorToEnd() {
     return 0;
 }
 
-int Editor::appendChar(const char c) {
-    this->cp->setCol((*this->cp->getRow()).insert(cp->getCol(), c));
-
-    return 0;
-}
-
 int Editor::insertChar(const char c) {
     this->cp->setCol(++(*this->cp->getRow()).insert(this->cp->getCol(), c));
     this->cp->incColIndex();

@@ -7,7 +7,6 @@ class Cursor;
 
 enum MODE {
     MODE_COMMAND = 0,
-    MODE_APPEND,
     MODE_INSERT,
     MODE_LAST_LINE,
     MODE_END
@@ -72,13 +71,6 @@ public:
     int moveCursorToEnd();
 
     /**
-     * Append character following current cursor position.
-     * @param c         character to append
-     * @return          0 if the operation succeeded
-     */
-	int appendChar(const char c);
-
-    /**
      * Insert character before the current cursor position.
      * @param c         character to append
      * @return          0 if the operation succeeded
@@ -115,8 +107,6 @@ public:
 
 	//getter
     MODE getMode() { return mode; }
-
-    bool isTextEntryMode() { return mode >= MODE_APPEND && mode <= MODE_INSERT; }
 
 };
 
