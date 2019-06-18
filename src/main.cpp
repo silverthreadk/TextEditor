@@ -67,6 +67,11 @@ int main(int argc, char** argv) {
                 editor->setMode(MODE_INSERT);
                 break;
             }
+            case 'A': {
+                editor->moveCursorToEnd();
+                editor->setMode(MODE_INSERT);
+                break;
+            }
             case 'i': {
                 editor->setMode(MODE_INSERT);
                 break;
