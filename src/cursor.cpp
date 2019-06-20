@@ -14,7 +14,9 @@ Cursor::Cursor(list<list<char> >::iterator row, list<char>::iterator col) {
 Cursor::~Cursor() {
 }
 
-int Cursor::move(const char command, const int row_size) {
+int Cursor::move(const char command, const int row_size, const bool is_insert_mode) {
+    const int end = static_cast<int>((*row).size()) - (is_insert_mode ? 0 : 1);
+
     switch (command) {
     case 'k':   //top
         if (this->row_idx > 0) {
@@ -40,7 +42,7 @@ int Cursor::move(const char command, const int row_size) {
         break;
 
     case 'l':   //right
-        if (this->col_idx < (*this->row).size()) {
+        if (col_idx < end) {
             ++(this->col);
             ++(this->col_idx);
         }

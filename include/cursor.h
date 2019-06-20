@@ -20,7 +20,7 @@ public:
 	Cursor(list<list<char> >::iterator row, list<char>::iterator col);
 	~Cursor();
 
-	int move(const char command, const int row_size);
+	int move(const char command, const int row_size, const bool is_insert_mode = false);
 
     void scrollUp();
     void scrollDown();

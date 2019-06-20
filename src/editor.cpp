@@ -134,7 +134,7 @@ int Editor::printEditor() {
 }
 
 int Editor::moveCursor(const char c) {
-    return cp->move(c, this->text_list.size());
+    return cp->move(c, this->text_list.size(), mode == MODE_INSERT);
 }
 
 int Editor::moveCursorToBeginning() {
@@ -145,8 +145,8 @@ int Editor::moveCursorToBeginning() {
 }
 
 int Editor::moveCursorToEnd() {
-    cp->setCol(cp->getRow()->end());
-    cp->setColIndex(cp->getRow()->size());
+    cp->setCol(std::prev(cp->getRow()->end()));
+    cp->setColIndex(cp->getRow()->size()-1);
 
     return 0;
 }
