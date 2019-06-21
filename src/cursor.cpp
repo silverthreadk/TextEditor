@@ -1,6 +1,8 @@
 #include "cursor.h"
 #include "utils.h"
 
+#include <algorithm>
+
 Cursor::Cursor(list<list<char> >::iterator row, list<char>::iterator col) {
 	row_idx=0;
 	col_idx=0;
@@ -15,7 +17,7 @@ Cursor::~Cursor() {
 }
 
 int Cursor::move(const char command, const int row_size, const bool is_insert_mode) {
-    const int end = static_cast<int>((*row).size()) - (is_insert_mode ? 0 : 1);
+    const int end = static_cast<int>(row->size()) - (is_insert_mode ? 0 : 1);
 
     switch (command) {
     case 'k':   //top
@@ -24,13 +26,8 @@ int Cursor::move(const char command, const int row_size, const bool is_insert_mo
                 scrollUp();
             --(this->row);
             --(this->row_idx);
-            if (col_idx >= (*this->row).size()) {
-                this->col_idx = (*this->row).size();
-                this->col = (*this->row).end();
-            } else {
-                this->col = (*this->row).begin();
-                for (int i = 0; i < col_idx && (*this->row).end() != this->col; ++i, ++this->col);
-            }
+
+            moveCol(col_idx);
         }
         break;
 
@@ -55,18 +52,26 @@ int Cursor::move(const char command, const int row_size, const bool is_insert_mo
             ++(this->row);
             ++(this->row_idx);
 
-            if (col_idx >= (*this->row).size()) {
-                this->col_idx = (*this->row).size();
-                this->col = (*this->row).end();
-            } else {
-                this->col = (*this->row).begin();
-                for (int i = 0; i < col_idx && (*this->row).end() != this->col; ++i, ++this->col);
-            }
+            moveCol(col_idx);
         }
         break;
 
     }
     return 0;
+}
+
+void Cursor::moveCol(const int n) {
+    if (row->empty()) {
+        col_idx = 0;
+        col = row->begin();
+    } else if (n >= row->size()) {
+        col_idx = row->size() - 1;
+        col = std::prev(row->end());
+    } else {
+        col_idx = std::min(n, static_cast<int>(row->size()) - 1);
+        col = row->begin();
+        std::advance(col, col_idx);
+    }
 }
 
 void Cursor::scrollUp() {

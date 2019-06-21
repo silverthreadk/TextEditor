@@ -57,6 +57,9 @@ public:
 	void decCol();
 	void decRowIndex();
 	void decColIndex();
+
+private:
+    void moveCol(const int n);
 };
 
 
