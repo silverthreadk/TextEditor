@@ -200,32 +200,29 @@ int Editor::insertLineBefore() {
 }
 
 int Editor::deleteLine() {
-    list<char> temp;
+    if (cp->getRow() == text_list.end()) return 1;
 
-    if ((this->cp->getRow()) != (this->text_list).end()) {
-        cp->scrollUp();
+    if (text_list.size() == 1) {
+        (*cp->getRow()).clear();
+        cp->setCol((*cp->getRow()).begin());
+        cp->setColIndex(0);
 
-        (*this->cp->getRow()).clear();
-        this->cp->setRow((this->text_list).erase(this->cp->getRow()));
-
-        if (cp->getRow() == (this->text_list).begin()) cp->setScrollPosition((this->text_list).begin());
-
-        if ((this->cp->getRow()) == (this->text_list).end()) {
-            if ((this->text_list).size() == 0) {
-                text_list.push_back(temp);
-                this->cp->setRow(text_list.begin());
-                this->cp->setCol((*text_list.begin()).begin());
-            }
-            else {
-                this->cp->decRow();
-                this->cp->setCol((*this->cp->getRow()).begin());
-                this->cp->decRowIndex();
-            }
-        }
-        else
-            this->cp->setCol((*this->cp->getRow()).begin());
-        this->cp->setColIndex(0);
+        return 0;
     }
+
+    cp->scrollUp();
+    (*cp->getRow()).clear();
+    cp->setRow(text_list.erase(cp->getRow()));
+
+    if (cp->getRow() == text_list.begin()) cp->setScrollPosition(text_list.begin());
+
+    if (cp->getRow() == text_list.end()) {
+        cp->decRow();
+        cp->decRowIndex();
+    }
+
+    cp->setCol((*cp->getRow()).begin());
+    cp->setColIndex(0);
 
     return 0;
 }
