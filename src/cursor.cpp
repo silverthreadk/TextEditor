@@ -4,7 +4,9 @@
 
 #include "utils.h"
 
-Cursor::Cursor(list<list<char> >::iterator row, list<char>::iterator col) {
+using namespace std;
+
+Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::iterator col) {
     row_idx=0;
     col_idx=0;
 
@@ -88,10 +90,10 @@ void Cursor::scrollDown() {
 }
 
 //getter
-list<list<char> >::iterator Cursor::getRow(){
+std::list<std::list<char> >::iterator Cursor::getRow(){
     return row;
 }
-list<char>::iterator Cursor::getCol(){
+std::list<char>::iterator Cursor::getCol(){
     return col;
 }
 int Cursor::getRowIndex(){
@@ -102,10 +104,10 @@ int Cursor::getColIndex() {
 }
 
 //setter
-void Cursor::setRow(const list<list<char> >::iterator r) {
+void Cursor::setRow(const std::list<std::list<char> >::iterator r) {
     row = r;
 }
-void Cursor::setCol(const list<char>::iterator c) {
+void Cursor::setCol(const std::list<char>::iterator c) {
     col = c;
 }
 void Cursor::setRowIndex(const int idx) {
