@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <conio.h>
 #include <regex>
 
@@ -8,25 +7,25 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-	char filepath[200];
-	char ch = 0;
+    char filepath[200];
+    char ch = 0;
     char prev_ch = 0;
-	int number;
+    int number;
 
-	Editor* editor;
+    Editor* editor;
 
     smatch m;
     regex pattern("(\\w)\\s?([\\W*\\w*]*)?");
 
-	if (argv[1] == NULL) {
+    if (argv[1] == NULL) {
         printf("Input filename");
         return 0;
-	} else {
-		strcpy(filepath, argv[1]);
-		editor = new Editor(filepath);
-	}
+    } else {
+        strcpy(filepath, argv[1]);
+        editor = new Editor(filepath);
+    }
 
-	while (editor->getMode() < MODE_END) {
+    while (editor->getMode() < MODE_END) {
         editor->printEditor();
         if (editor->getMode() == MODE_LAST_LINE) {
             string input, command1, command2, str;
@@ -121,7 +120,7 @@ int main(int argc, char** argv) {
                 editor->insertChar(ch);
             }
         }
-	}
+    }
 
-	return 0;
+    return 0;
 }

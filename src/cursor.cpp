@@ -1,11 +1,12 @@
 #include "cursor.h"
-#include "utils.h"
 
 #include <algorithm>
 
+#include "utils.h"
+
 Cursor::Cursor(list<list<char> >::iterator row, list<char>::iterator col) {
-	row_idx=0;
-	col_idx=0;
+    row_idx=0;
+    col_idx=0;
 
     this->row = row;
     this->col = col;
@@ -21,36 +22,36 @@ int Cursor::move(const char command, const int row_size, const bool is_insert_mo
 
     switch (command) {
     case 'k':   //top
-        if (this->row_idx > 0) {
-            if (this->row_idx == this->scroll_position_idx)
+        if (row_idx > 0) {
+            if (row_idx == scroll_position_idx)
                 scrollUp();
-            --(this->row);
-            --(this->row_idx);
+            --row;
+            --row_idx;
 
             moveCol(col_idx);
         }
         break;
 
     case 'h':   //left
-        if (this->col_idx > 0) {
-            --(this->col);
-            --(this->col_idx);
+        if (col_idx > 0) {
+            --col;
+            --col_idx;
         }
         break;
 
     case 'l':   //right
         if (col_idx < end) {
-            ++(this->col);
-            ++(this->col_idx);
+            ++col;
+            ++col_idx;
         }
         break;
 
     case 'j':   //down
-        if (this->row_idx < row_size - 1) {
-            if (this->row_idx >= this->scroll_position_idx + getScreenSize() - 2)
+        if (row_idx < row_size - 1) {
+            if (row_idx >= scroll_position_idx + getScreenSize() - 2)
                 scrollDown();
-            ++(this->row);
-            ++(this->row_idx);
+            ++row;
+            ++row_idx;
 
             moveCol(col_idx);
         }
@@ -88,57 +89,57 @@ void Cursor::scrollDown() {
 
 //getter
 list<list<char> >::iterator Cursor::getRow(){
-	return this->row;
+    return row;
 }
 list<char>::iterator Cursor::getCol(){
-	return this->col;
+    return col;
 }
 int Cursor::getRowIndex(){
-	return this->row_idx;
+    return row_idx;
 }
 int Cursor::getColIndex() {
-	return this->col_idx;
+    return col_idx;
 }
 
 //setter
 void Cursor::setRow(const list<list<char> >::iterator r) {
-	this->row = r;
+    row = r;
 }
 void Cursor::setCol(const list<char>::iterator c) {
-	this->col = c;
+    col = c;
 }
 void Cursor::setRowIndex(const int idx) {
-	this->row_idx = idx;
+    row_idx = idx;
 }
 void Cursor::setColIndex(const int idx) {
-	this->col_idx = idx;
+    col_idx = idx;
 }
 
 //increase
 void Cursor::incRow() {
-	++(this->row);
+    ++row;
 }
 void Cursor::incCol() {
-	++(this->col);
+    ++col;
 }
 void Cursor::incRowIndex() {
     if (row_idx == scroll_position_idx) ++scroll_position_idx;
-	++(this->row_idx);
+    ++row_idx;
 }
 void Cursor::incColIndex() {
-	++(this->col_idx);
+    ++col_idx;
 }
 
 //decrease
 void Cursor::decRow() {
-	--(this->row);
+    --row;
 }
 void Cursor::decCol() {
-	--(this->col);
+    --col;
 }
 void Cursor::decRowIndex() {
-	--(this->row_idx);
+    --row_idx;
 }
 void Cursor::decColIndex() {
-	--(this->col_idx);
+    --col_idx;
 }

@@ -1,21 +1,12 @@
 #include "editor.h"
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <list>
-
-#ifdef WINDOWS
-#include <windows.h>
-#else
-#include <sys/ioctl.h>
-#endif
 
 #include "cursor.h"
 #include "utils.h"
 
 using namespace std;
-
-
 
 Editor::Editor(const char* filepath) {
     cp = NULL;
@@ -27,75 +18,75 @@ Editor::Editor(const char* filepath) {
 }
 
 Editor::~Editor() {
-	delete cp;
+    delete cp;
 }
 
 int Editor::editFile() {
-	FILE* fp;
-	char c;
-	list<char> temp;
+    FILE* fp;
+    char c;
+    list<char> temp;
 
-	if ((fp = fopen(this->filepath, "r")) == NULL) {
-		text_list.push_back(temp);
+    if ((fp = fopen(filepath, "r")) == NULL) {
+        text_list.push_back(temp);
 
-        this->cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
-	} else {
-		while (fscanf(fp, "%c", &c) != EOF) {
-			if (c == '\n' || c == '\r') {
-				text_list.push_back(temp);
-				temp.clear();
-			} else {
-				temp.push_back(c);
-			}
-		}
-		text_list.push_back(temp);
+        cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
+    } else {
+        while (fscanf(fp, "%c", &c) != EOF) {
+            if (c == '\n' || c == '\r') {
+                text_list.push_back(temp);
+                temp.clear();
+            } else {
+                temp.push_back(c);
+            }
+        }
+        text_list.push_back(temp);
 
-        this->cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
-		
-		fclose(fp);
-	}
-	return 0;
+        cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
+
+        fclose(fp);
+    }
+    return 0;
 }
 
 
 int Editor::writeFile() {
-	FILE *fp;
-	Cursor* cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
-	
-	if ((fp = fopen(this->filepath, "w")) == NULL)
-		return 1;
-	else {
-		for (cp->setRow(text_list.begin()); cp->getRow() != text_list.end(); cp->incRow()) {
-			for (cp->setCol((*cp->getRow()).begin()); cp->getCol() != (*cp->getRow()).end(); cp->incCol()) {
-				fputc(*(cp->getCol()), fp);
-			}
-			fputc('\n', fp);
-		}
+    FILE *fp;
+    Cursor* cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
 
-		fclose(fp);
-	}
+    if ((fp = fopen(filepath, "w")) == NULL)
+        return 1;
+    else {
+        for (cp->setRow(text_list.begin()); cp->getRow() != text_list.end(); cp->incRow()) {
+            for (cp->setCol((*cp->getRow()).begin()); cp->getCol() != (*cp->getRow()).end(); cp->incCol()) {
+                fputc(*(cp->getCol()), fp);
+            }
+            fputc('\n', fp);
+        }
 
-	return 0;
+        fclose(fp);
+    }
+
+    return 0;
 }
 
 int Editor::writeFile(const char* filepath) {
-	FILE *fp;
-	this->filepath = filepath;
+    FILE *fp;
+    this->filepath = filepath;
     Cursor* cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
 
-	if ((fp = fopen(this->filepath, "w")) == NULL) return 1;
-	else {
-		for (cp->setRow(text_list.begin()); cp->getRow() != text_list.end(); cp->incRow()) {
-			for (cp->setCol((*cp->getRow()).begin()); cp->getCol() != (*cp->getRow()).end(); cp->incCol()) {
-				fputc(*(cp->getCol()), fp);
-			}
-			fputc('\n', fp);
-		}
+    if ((fp = fopen(filepath, "w")) == NULL) return 1;
+    else {
+        for (cp->setRow(text_list.begin()); cp->getRow() != text_list.end(); cp->incRow()) {
+            for (cp->setCol((*cp->getRow()).begin()); cp->getCol() != (*cp->getRow()).end(); cp->incCol()) {
+                fputc(*(cp->getCol()), fp);
+            }
+            fputc('\n', fp);
+        }
 
-		fclose(fp);
-	}
+        fclose(fp);
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -115,10 +106,10 @@ int Editor::printEditor() {
         int col_idx = 0;
         list<char>::iterator col = (*row).begin();
         for (; col != (*row).end(); ++col_idx, ++col) {
-            if (row_idx == cp->getRowIndex() && col_idx == this->cp->getColIndex()) printf("|");
+            if (row_idx == cp->getRowIndex() && col_idx == cp->getColIndex()) printf("|");
             else printf("%c", *(col));
         }
-        if (row_idx == cp->getRowIndex() && col_idx == this->cp->getColIndex()) printf("|");
+        if (row_idx == cp->getRowIndex() && col_idx == cp->getColIndex()) printf("|");
 
         printf("\n");
     }
@@ -134,7 +125,7 @@ int Editor::printEditor() {
 }
 
 int Editor::moveCursor(const char c) {
-    return cp->move(c, this->text_list.size(), mode == MODE_INSERT);
+    return cp->move(c, text_list.size(), mode == MODE_INSERT);
 }
 
 int Editor::moveCursorToBeginning() {
@@ -152,15 +143,15 @@ int Editor::moveCursorToEnd() {
 }
 
 int Editor::insertChar(const char c) {
-    this->cp->setCol(++(*this->cp->getRow()).insert(this->cp->getCol(), c));
-    this->cp->incColIndex();
+    cp->setCol(++(*cp->getRow()).insert(cp->getCol(), c));
+    cp->incColIndex();
 
     return 0;
 }
 
 int Editor::deleteChar() {
-    if ((this->cp->getCol()) != (*this->cp->getRow()).end()) {
-        this->cp->setCol((*this->cp->getRow()).erase(this->cp->getCol()));
+    if ((cp->getCol()) != (*cp->getRow()).end()) {
+        cp->setCol((*cp->getRow()).erase(cp->getCol()));
     } else {
         return 1;
     }
@@ -174,7 +165,7 @@ int Editor::insertLine() {
     cp->scrollDown();
 
     cp->incRow();
-    cp->setRow(text_list.insert(this->cp->getRow(), temp));
+    cp->setRow(text_list.insert(cp->getRow(), temp));
     cp->incRowIndex();
     cp->setCol((*cp->getRow()).begin());
     cp->setColIndex(0);
@@ -187,9 +178,9 @@ int Editor::insertLine() {
 int Editor::insertLineBefore() {
     list<char> temp;
 
-    text_list.insert(this->cp->getRow(), temp);
+    text_list.insert(cp->getRow(), temp);
     cp->incRowIndex();
-    cp->setCol((*this->cp->getRow()).begin());
+    cp->setCol((*cp->getRow()).begin());
     cp->setColIndex(0);
 
     moveCursor('k');
