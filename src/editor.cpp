@@ -124,22 +124,28 @@ int Editor::printEditor() {
     return 0;
 }
 
-int Editor::moveCursor(const char c) {
-    return cp->move(c, text_list.size(), mode == MODE_INSERT);
+int Editor::moveCursorToLeft() {
+    return cp->moveToLeft();
+}
+
+int Editor::moveCursorToRight() {
+    return cp->moveToRight(mode == MODE_INSERT);
+}
+
+int Editor::moveCursorToUp() {
+    return cp->moveToUp();
+}
+
+int Editor::moveCursorToDown() {
+    return cp->moveToDown(text_list.size());
 }
 
 int Editor::moveCursorToBeginning() {
-    cp->setCol(cp->getRow()->begin());
-    cp->setColIndex(0);
-
-    return 0;
+    return cp->moveToBeginning();
 }
 
 int Editor::moveCursorToEnd() {
-    cp->setCol(std::prev(cp->getRow()->end()));
-    cp->setColIndex(cp->getRow()->size()-1);
-
-    return 0;
+    return cp->moveToEnd();
 }
 
 int Editor::insertChar(const char c) {
@@ -183,7 +189,7 @@ int Editor::insertLineBefore() {
     cp->setCol((*cp->getRow()).begin());
     cp->setColIndex(0);
 
-    moveCursor('k');
+    moveCursorToUp();
 
     mode = MODE_INSERT;
 

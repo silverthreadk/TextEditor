@@ -19,47 +19,56 @@ Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::itera
 Cursor::~Cursor() {
 }
 
-int Cursor::move(const char command, const int row_size, const bool is_insert_mode) {
+int Cursor::moveToLeft() {
+    if (col_idx <= 0) return 1;
+
+    --col;
+    --col_idx;
+    return 0;
+}
+
+int Cursor::moveToRight(const bool is_insert_mode) {
     const int end = static_cast<int>(row->size()) - (is_insert_mode ? 0 : 1);
+    if (col_idx >= end) return 1;
 
-    switch (command) {
-    case 'k':   //top
-        if (row_idx > 0) {
-            if (row_idx == scroll_position_idx)
-                scrollUp();
-            --row;
-            --row_idx;
+    ++col;
+    ++col_idx;
+    return 0;
+}
 
-            moveCol(col_idx);
-        }
-        break;
+int Cursor::moveToUp() {
+    if (row_idx <= 0) return 1;
 
-    case 'h':   //left
-        if (col_idx > 0) {
-            --col;
-            --col_idx;
-        }
-        break;
+    if (row_idx == scroll_position_idx) scrollUp();
+    --row;
+    --row_idx;
 
-    case 'l':   //right
-        if (col_idx < end) {
-            ++col;
-            ++col_idx;
-        }
-        break;
+    moveCol(col_idx);
+    return 0;
+}
 
-    case 'j':   //down
-        if (row_idx < row_size - 1) {
-            if (row_idx >= scroll_position_idx + getScreenSize() - 2)
-                scrollDown();
-            ++row;
-            ++row_idx;
+int Cursor::moveToDown(const int row_size) {
+    if (row_idx >= row_size - 1) return 1;
 
-            moveCol(col_idx);
-        }
-        break;
+    if (row_idx >= scroll_position_idx + getScreenSize() - 2) scrollDown();
+    ++row;
+    ++row_idx;
 
-    }
+    moveCol(col_idx);
+    return 0;
+}
+
+int Cursor::moveToBeginning() {
+    col = row->begin();
+    col_idx = 0;
+
+    return 0;
+}
+
+int Cursor::moveToEnd() {
+    col = std::prev(row->end());
+    col_idx = row->size() - 1;
+
     return 0;
 }
 

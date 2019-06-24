@@ -51,12 +51,28 @@ public:
     int printEditor();
 
     /**
-     * Move around using cursor key.
-     * Use the cursor keys, "h" to go left, "j" to go down, "k" to go up, "l" to go right.
-     * @param c         direction to move cursor
+     * Move the cursor one character to the left
      * @return          0 if the operation succeeded
      */
-    int moveCursor(const char c);
+    int moveCursorToLeft();
+
+    /**
+     * Move the cursor one character to the right
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToRight();
+
+    /**
+     * Move the cursor up one line
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToUp();
+
+    /**
+     * Move the cursor up one line
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToDown();
 
     /**
      * Move cursor to the beginning of current line.
