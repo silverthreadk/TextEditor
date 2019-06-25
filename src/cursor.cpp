@@ -134,7 +134,6 @@ void Cursor::incCol() {
     ++col;
 }
 void Cursor::incRowIndex() {
-    if (row_idx == scroll_position_idx) ++scroll_position_idx;
     ++row_idx;
 }
 void Cursor::incColIndex() {

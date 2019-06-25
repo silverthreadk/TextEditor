@@ -83,6 +83,9 @@ public:
     void incCol();
     void incRowIndex();
     void incColIndex();
+    void incScrollPositionIndex() {
+        if (row_idx == scroll_position_idx) ++scroll_position_idx;
+    }
 
     //decrease
     void decRow();

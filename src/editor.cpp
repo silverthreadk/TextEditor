@@ -173,8 +173,8 @@ int Editor::insertLine() {
     cp->incRow();
     cp->setRow(text_list.insert(cp->getRow(), temp));
     cp->incRowIndex();
-    cp->setCol((*cp->getRow()).begin());
-    cp->setColIndex(0);
+
+    cp->moveToBeginning();
 
     mode = MODE_INSERT;
 
@@ -185,11 +185,11 @@ int Editor::insertLineBefore() {
     list<char> temp;
 
     text_list.insert(cp->getRow(), temp);
+    cp->incScrollPositionIndex();
     cp->incRowIndex();
-    cp->setCol((*cp->getRow()).begin());
-    cp->setColIndex(0);
 
-    moveCursorToUp();
+    cp->moveToBeginning();
+    cp->moveToUp();
 
     mode = MODE_INSERT;
 
