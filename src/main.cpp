@@ -75,6 +75,11 @@ int main(int argc, char** argv) {
                 editor->setMode(MODE_INSERT);
                 break;
             }
+            case 'I': {
+                editor->moveCursorToBeginning();
+                editor->setMode(MODE_INSERT);
+                break;
+            }
             case 'x': {
                 editor->deleteChar();
                 break;
