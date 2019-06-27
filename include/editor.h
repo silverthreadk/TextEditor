@@ -117,6 +117,12 @@ public:
      */
     int deleteLine();
 
+    /*
+     * Delete character from cursor to end of line.
+     * @return          0 if the operation succeeded
+     */
+    int deleteToEndOfLine();
+
     //setter
     void setMode(MODE mode) { this->mode = mode; }
     void setLineNumber(bool line_number) { this->line_number = line_number; }

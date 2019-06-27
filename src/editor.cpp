@@ -223,3 +223,12 @@ int Editor::deleteLine() {
 
     return 0;
 }
+
+int Editor::deleteToEndOfLine()
+{
+    if ((cp->getCol()) != (*cp->getRow()).end()) {
+        (*cp->getRow()).erase(cp->getCol(), cp->getRow()->end());
+    } else {
+        return 1;
+    }
+}

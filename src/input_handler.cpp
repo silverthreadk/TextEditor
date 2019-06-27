@@ -106,7 +106,12 @@ void InputHandler::handleInput()
                 break;
             }
             case '$': {
-                editor->moveCursorToEnd();
+                if (prev_ch == 'd') {
+                    editor->deleteToEndOfLine();
+                    prev_ch = 0;
+                } else {
+                    editor->moveCursorToEnd();
+                }
                 break;
             }
             case 'k': {
