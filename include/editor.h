@@ -118,6 +118,12 @@ public:
     int deleteLine();
 
     /*
+     * Delete character from beginning of line to cursor.
+     * @return          0 if the operation succeeded
+     */
+    int deleteToBeginningOfLine();
+
+    /*
      * Delete character from cursor to end of line.
      * @return          0 if the operation succeeded
      */

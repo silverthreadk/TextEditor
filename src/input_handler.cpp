@@ -105,6 +105,13 @@ void InputHandler::handleInput()
                 editor->moveCursorToBeginning();
                 break;
             }
+            case '^': {
+                if (prev_ch == 'd') {
+                    editor->deleteToBeginningOfLine();
+                    prev_ch = 0;
+                }
+                break;
+            }
             case '$': {
                 if (prev_ch == 'd') {
                     editor->deleteToEndOfLine();

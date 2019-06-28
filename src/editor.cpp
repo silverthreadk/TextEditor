@@ -224,6 +224,16 @@ int Editor::deleteLine() {
     return 0;
 }
 
+int Editor::deleteToBeginningOfLine()
+{
+    if ((cp->getCol()) != (*cp->getRow()).begin()) {
+        (*cp->getRow()).erase(cp->getRow()->begin(), cp->getCol());
+        cp->setColIndex(0);
+    } else {
+        return 1;
+    }
+}
+
 int Editor::deleteToEndOfLine()
 {
     if ((cp->getCol()) != (*cp->getRow()).end()) {
