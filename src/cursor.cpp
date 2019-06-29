@@ -98,6 +98,14 @@ void Cursor::scrollDown() {
     ++scroll_position;
 }
 
+void Cursor::scrollTo() {
+    scroll_position = row;
+    scroll_position_idx = row_idx;
+
+    int offset = row_idx - getScreenSize() - 2;
+    for (int i = 0; i < offset; ++i) scrollUp();
+}
+
 //getter
 std::list<std::list<char> >::iterator Cursor::getRow(){
     return row;

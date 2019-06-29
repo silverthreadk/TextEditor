@@ -56,6 +56,8 @@ public:
 
     void scrollUp();
     void scrollDown();
+    void scrollTo();
+
 
 
     //getter

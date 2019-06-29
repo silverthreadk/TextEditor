@@ -86,6 +86,13 @@ public:
      */
     int moveCursorToEnd();
 
+    /*
+     * Move cursor to the specified line.
+     * @param n         n th line
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToSpecifiedLine(int n);
+
     /**
      * Insert character before the current cursor position.
      * @param c         character to append

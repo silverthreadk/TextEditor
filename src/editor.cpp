@@ -148,6 +148,20 @@ int Editor::moveCursorToEnd() {
     return cp->moveToEnd();
 }
 
+int Editor::moveCursorToSpecifiedLine(int n) {
+    if (text_list.size() <= n) {
+        cp->setRow(std::prev(text_list.end()));
+        cp->setRowIndex(text_list.size() - 1);
+    } else {
+        auto temp = text_list.begin();
+        std::advance(temp, n);
+        cp->setRow(temp);
+        cp->setRowIndex(n);
+    }
+    cp->scrollTo();
+    return 0;
+}
+
 int Editor::insertChar(const char c) {
     cp->setCol(++(*cp->getRow()).insert(cp->getCol(), c));
     cp->incColIndex();

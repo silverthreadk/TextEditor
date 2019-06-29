@@ -40,3 +40,7 @@ int getConsoleCursor() {
     return 20;
 #endif
 }
+
+bool isDigit(std::string str) {
+    return atoi(str.c_str()) != 0 || str.compare("0") == 0;
+}

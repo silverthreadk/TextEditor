@@ -5,6 +5,7 @@
 #include <regex>
 
 #include "editor.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -51,6 +52,9 @@ void InputHandler::handleInput()
                 editor->setLineNumber(true);
             } else if (command1 == "set nonumber") {
                 editor->setLineNumber(false);
+            } else if(isDigit(command1)){
+                int n = atoi(command1.c_str());
+                editor->moveCursorToSpecifiedLine(n-1);
             }
             editor->setMode(MODE_COMMAND);
             ch = 0;
