@@ -22,6 +22,7 @@ void InputHandler::handleInput()
 {
     char ch = 0;
     char prev_ch = 0;
+    string num = "";
 
     smatch m;
     regex pattern("(\\w)\\s?([\\W*\\w*]*)?");
@@ -106,7 +107,11 @@ void InputHandler::handleInput()
                 break;
             }
             case '0': {
-                editor->moveCursorToBeginning();
+                if (num.empty()) {
+                    editor->moveCursorToBeginning();
+                } else {
+                    num += ch;
+                }
                 break;
             }
             case '^': {
@@ -141,6 +146,16 @@ void InputHandler::handleInput()
                 editor->moveCursorToLeft();
                 break;
             }
+            case 'G': {
+                int n = atoi(num.c_str());
+                editor->moveCursorToSpecifiedLine(n - 1);
+            }
+            }
+
+            if (ch >= '1' && ch <= '9') {
+                num += ch;
+            } else {
+                num = "";
             }
         } else if (editor->getMode() == MODE_INSERT) {
             ch = getch();
