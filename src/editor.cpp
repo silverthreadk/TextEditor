@@ -159,6 +159,10 @@ int Editor::moveCursorToSpecifiedLine(int n) {
         cp->setRowIndex(n);
     }
     cp->scrollTo();
+
+    cp->setCol((*cp->getRow()).begin());
+    cp->setColIndex(0);
+
     return 0;
 }
 
