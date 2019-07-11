@@ -9,16 +9,15 @@
 
 using namespace std;
 
-InputHandler::InputHandler(Editor* editor)
+InputHandler::InputHandler()
 {
-    this->editor = editor;
 }
 
 InputHandler::~InputHandler()
 {
 }
 
-void InputHandler::handleInput()
+void InputHandler::handleInput(Editor* editor)
 {
     char ch = 0;
     char prev_ch = 0;

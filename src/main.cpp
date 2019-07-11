@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
 
     Editor* editor = new Editor(argv[1]);
 
-    InputHandler input_handler(editor);
-    input_handler.handleInput();
+    InputHandler input_handler;
+    input_handler.handleInput(editor);
 
     delete editor;
     return 0;

@@ -4,16 +4,14 @@
 class Editor;
 
 class InputHandler {
-private:
-    Editor* editor;
 public:
-    InputHandler(Editor* editor);
+    InputHandler();
     ~InputHandler();
 
     /*
-     * Handle editor commands read  from standard input.
+     * Handle editor commands read from standard input.
      */
-    void handleInput();
+    void handleInput(Editor* editor);
 };
 
 #endif
