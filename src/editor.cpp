@@ -26,7 +26,7 @@ int Editor::editFile() {
     char c;
     list<char> temp;
 
-    if ((fp = fopen(filepath, "r")) == NULL) {
+    if (filepath == NULL || (fp = fopen(filepath, "r")) == NULL) {
         text_list.push_back(temp);
 
         cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
@@ -50,6 +50,8 @@ int Editor::editFile() {
 
 
 int Editor::writeFile() {
+    if (filepath == NULL) return 1;
+
     FILE *fp;
     Cursor* cp = new Cursor(text_list.begin(), (*text_list.begin()).begin());
 
