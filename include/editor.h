@@ -1,28 +1,21 @@
-#ifndef __EDITOR__
-#define __EDITOR__
+#ifndef EDITOR_H_
+#define EDITOR_H_
 
 #include <list>
 
 class Cursor;
 
-enum MODE {
-    MODE_COMMAND = 0,
-    MODE_INSERT,
-    MODE_LAST_LINE,
-    MODE_END
-};
-
 class Editor {
-private:
-    Cursor* cp;
-    std::list<std::list<char> > text_list;
-    MODE mode;
-    bool line_number;
+ public:
+    enum MODE {
+        MODE_COMMAND = 0,
+        MODE_INSERT,
+        MODE_LAST_LINE,
+        MODE_END
+    };
 
-    const char* filepath;
+    explicit Editor(const char* filepath);
 
-public:
-    Editor(const char* filepath);
     ~Editor();
 
     /**
@@ -136,14 +129,20 @@ public:
      */
     int deleteToEndOfLine();
 
-    //setter
-    void setMode(MODE mode) { this->mode = mode; }
-    void setLineNumber(bool line_number) { this->line_number = line_number; }
+    void setMode(MODE mode) { this->mode_ = mode; }
 
-    //getter
-    MODE getMode() { return mode; }
+    MODE getMode() { return mode_; }
 
+    void setLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
+
+ private:
+    Cursor* cursor_;
+    std::list<std::list<char> > text_list_;
+    MODE mode_;
+    bool show_line_number_;
+
+    const char* filepath_;
 };
 
 
-#endif
+#endif  // EDITOR_H_

@@ -1,21 +1,12 @@
-#ifndef __CURSOR__
-#define __CURSOR__
+#ifndef CURSOR_H_
+#define CURSOR_H_
 
 #include <list>
 
 class Cursor {
-private:
-    std::list<std::list<char> >::iterator row;
-    std::list<char>::iterator col;
-
-    int row_idx;
-    int col_idx;
-
-    std::list<std::list<char> >::iterator scroll_position;
-    int scroll_position_idx;
-
-public:
+ public:
     Cursor(std::list<std::list<char> >::iterator row, std::list<char>::iterator col);
+
     ~Cursor();
 
     /**
@@ -55,49 +46,67 @@ public:
     int moveToEnd();
 
     void scrollUp();
+
     void scrollDown();
+
     void scrollTo();
 
-
-
-    //getter
     std::list<std::list<char> >::iterator getRow();
+
     std::list<char>::iterator getCol();
+
     int getRowIndex();
+
     int getColIndex();
 
     std::pair<std::list<std::list<char> >::iterator, int> getScrollPosition() {
-        return make_pair(scroll_position, scroll_position_idx);
+        return make_pair(scroll_position_, scroll_position_idx_);
     }
 
-    //setter
     void setRow(const std::list<std::list<char> >::iterator r);
+
     void setCol(const std::list<char>::iterator c);
+
     void setRowIndex(const int idx);
+
     void setColIndex(const int idx);
 
     void setScrollPosition(std::list<std::list<char> >::iterator visible_top_row) {
-        this->scroll_position = visible_top_row;
+        this->scroll_position_ = visible_top_row;
     }
 
-    //increase
     void incRow();
+
     void incCol();
+
     void incRowIndex();
+
     void incColIndex();
+
     void incScrollPositionIndex() {
-        if (row_idx == scroll_position_idx) ++scroll_position_idx;
+        if (row_idx_ == scroll_position_idx_) ++scroll_position_idx_;
     }
 
-    //decrease
     void decRow();
+
     void decCol();
+
     void decRowIndex();
+
     void decColIndex();
 
-private:
+ private:
     void moveCol(const int n);
+
+    std::list<std::list<char> >::iterator row_;
+    std::list<char>::iterator col_;
+
+    int row_idx_;
+    int col_idx_;
+
+    std::list<std::list<char> >::iterator scroll_position_;
+    int scroll_position_idx_;
 };
 
 
-#endif 
+#endif  // CURSOR_H_

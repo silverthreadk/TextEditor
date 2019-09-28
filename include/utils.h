@@ -1,5 +1,5 @@
-#ifndef __UTILS__
-#define __UTILS__
+#ifndef UTILS_H_
+#define UTILS_H_
 
 #include <string>
 
@@ -9,6 +9,6 @@ int getScreenSize();
 
 int getConsoleCursor();
 
-bool isDigit(std::string str);
+bool isDigit(const std::string& str);
 
-#endif 
+#endif  // UTILS_H_

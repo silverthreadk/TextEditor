@@ -3,8 +3,6 @@
 #include "editor.h"
 #include "input_handler.h"
 
-using namespace std;
-
 int main(int argc, char** argv) {
     Editor* editor = new Editor(argv[1]);
 

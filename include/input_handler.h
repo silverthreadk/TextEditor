@@ -1,11 +1,12 @@
-#ifndef __INPUT_HANDLER__
-#define __INPUT_HANDLER__
+#ifndef INPUT_HANDLER_H_
+#define INPUT_HANDLER_H_
 
 class Editor;
 
 class InputHandler {
-public:
+ public:
     InputHandler();
+
     ~InputHandler();
 
     /*
@@ -14,4 +15,4 @@ public:
     void handleInput(Editor* editor);
 };
 
-#endif
+#endif  // INPUT_HANDLER_H_

@@ -8,6 +8,7 @@
 #include <sys/ioctl.h>
 #endif
 
+
 void clearScreen() {
 #ifdef WINDOWS
     system("cls");
@@ -41,6 +42,6 @@ int getConsoleCursor() {
 #endif
 }
 
-bool isDigit(std::string str) {
+bool isDigit(const std::string& str) {
     return atoi(str.c_str()) != 0 || str.compare("0") == 0;
 }
