@@ -21,7 +21,7 @@ void InputHandler::handleInput(Editor* editor) {
     std::string num = "";
 
     std::smatch m;
-    std::regex pattern("(\\w)\\s?([\\W*\\w*]*)?");
+    std::regex pattern("([\\S]*)\\s?([\\W*\\w*]*)?");
 
     while (editor->getMode() < Editor::MODE_END) {
         editor->printEditor();
@@ -39,12 +39,12 @@ void InputHandler::handleInput(Editor* editor) {
                 break;
             } else if (command1 == "w") {
                 editor->writeFile();
-            } else if (command2 == "w") {
-                editor->writeFile(str.c_str());
             } else if (command1 == "wq") {
                 editor->setMode(Editor::MODE_END);
                 editor->writeFile();
                 break;
+            } else if (command2 == "wq") {
+                editor->writeFile(str.c_str());
             } else if (command1 == "set nu" || command1 == "set number") {
                 editor->setLineNumber(true);
             } else if (command1 == "set nonumber") {
