@@ -43,5 +43,5 @@ int getConsoleCursor() {
 }
 
 bool isDigit(const std::string& str) {
-    return atoi(str.c_str()) != 0 || str.compare("0") == 0;
+    return std::stoi(str) != 0 || str.compare("0") == 0;
 }

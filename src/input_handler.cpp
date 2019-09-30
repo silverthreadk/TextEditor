@@ -50,7 +50,7 @@ void InputHandler::handleInput(Editor* editor) {
             } else if (command1 == "set nonumber") {
                 editor->setLineNumber(false);
             } else if (isDigit(command1)) {
-                int n = atoi(command1.c_str());
+                int n = std::stoi(command1);
                 editor->moveCursorToSpecifiedLine(n-1);
             }
             editor->setMode(Editor::MODE_COMMAND);
@@ -143,7 +143,7 @@ void InputHandler::handleInput(Editor* editor) {
                 break;
             }
             case 'G': {
-                int n = atoi(num.c_str());
+                int n = std::stoi(num);
                 editor->moveCursorToSpecifiedLine(n - 1);
             }
             }
