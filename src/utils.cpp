@@ -8,6 +8,7 @@
 #include <sys/ioctl.h>
 #endif
 
+#include <regex>
 
 void clearScreen() {
 #ifdef WINDOWS
@@ -43,5 +44,7 @@ int getConsoleCursor() {
 }
 
 bool isDigit(const std::string& str) {
-    return std::stoi(str) != 0 || str.compare("0") == 0;
+    std::smatch m;
+    std::regex pattern("([0-9]*)");
+    return regex_match(str, m, pattern);
 }
