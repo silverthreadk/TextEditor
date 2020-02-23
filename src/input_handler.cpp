@@ -96,9 +96,6 @@ void InputHandler::handleInput(Editor* editor) {
             case 'd': {
                 if (prev_ch == 'd') {
                     editor->deleteLine();
-                    prev_ch = 0;
-                } else {
-                    prev_ch = ch;
                 }
                 break;
             }
@@ -113,14 +110,12 @@ void InputHandler::handleInput(Editor* editor) {
             case '^': {
                 if (prev_ch == 'd') {
                     editor->deleteToBeginningOfLine();
-                    prev_ch = 0;
                 }
                 break;
             }
             case '$': {
                 if (prev_ch == 'd') {
                     editor->deleteToEndOfLine();
-                    prev_ch = 0;
                 } else {
                     editor->moveCursorToEnd();
                 }
@@ -145,7 +140,16 @@ void InputHandler::handleInput(Editor* editor) {
             case 'G': {
                 int n = std::stoi(num);
                 editor->moveCursorToSpecifiedLine(n - 1);
+                break;
             }
+            }
+
+            handleArrowKeys(editor, prev_ch, ch);
+
+            if (prev_ch == 'd' && ch == 'd') {
+                prev_ch = 0;
+            } else {
+                prev_ch = ch;
             }
 
             if (ch >= '1' && ch <= '9') {
@@ -158,9 +162,35 @@ void InputHandler::handleInput(Editor* editor) {
             if (ch == 27) {  // ESC
                 editor->moveCursorToLeft();
                 editor->setMode(Editor::MODE_COMMAND);
+            } else if (ch == -32) {
+            } else if (prev_ch == -32) {
+                handleArrowKeys(editor, prev_ch, ch);
             } else {
                 editor->insertChar(ch);
             }
+            prev_ch = ch;
         }
+    }
+}
+
+void InputHandler::handleArrowKeys(Editor* editor, const char prev_ch, const char ch) {
+    if (prev_ch != -32) return;
+    switch(ch) {
+    case 'H': {
+        editor->moveCursorToUp();
+        break;
+    }
+    case 'P': {
+        editor->moveCursorToDown();
+        break;
+    }
+    case 'M': {
+        editor->moveCursorToRight();
+        break;
+    }
+    case 'K': {
+        editor->moveCursorToLeft();
+        break;
+    }
     }
 }
