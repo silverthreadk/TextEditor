@@ -257,9 +257,10 @@ int Editor::deleteToBeginningOfLine() {
 }
 
 int Editor::deleteToEndOfLine() {
-    if ((cursor_->getCol()) != (*cursor_->getRow()).end()) {
-        (*cursor_->getRow()).erase(cursor_->getCol(), cursor_->getRow()->end());
-    } else {
-        return 1;
-    }
+    if ((cursor_->getCol()) == (*cursor_->getRow()).end()) return 1;
+
+    cursor_->setCol((*cursor_->getRow()).erase(cursor_->getCol(), cursor_->getRow()->end()));
+    cursor_->setColIndex((*cursor_->getRow()).size() - 1);
+
+    return 0;
 }
