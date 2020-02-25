@@ -5,7 +5,7 @@
 
 void clearScreen();
 
-int getScreenSize();
+std::pair<int, int> getScreenSize();
 
 int getConsoleCursor();
 

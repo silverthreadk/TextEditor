@@ -18,17 +18,18 @@ void clearScreen() {
 #endif
 }
 
-int getScreenSize() {
+std::pair<int, int> getScreenSize() {
 #ifdef WINDOWS
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-    int rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-    return rows;
+    const int rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+    const int cols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    return { rows, cols };
 #else
     struct winsize max;
     ioctl(0, TIOCGWINSZ, &max);
-    return max;
+    return { max.ws_row, max.ws_col };
 #endif
 }
 

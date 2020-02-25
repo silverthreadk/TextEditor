@@ -49,7 +49,7 @@ int Cursor::moveToUp() {
 int Cursor::moveToDown(const int row_size) {
     if (row_idx_ >= row_size - 1) return 1;
 
-    if (row_idx_ >= scroll_position_idx_ + getScreenSize() - 2) scrollDown();
+    if (row_idx_ >= scroll_position_idx_ + getScreenSize().first - 2) scrollDown();
     ++row_;
     ++row_idx_;
 
@@ -92,7 +92,7 @@ void Cursor::scrollUp() {
 }
 
 void Cursor::scrollDown() {
-    if (row_idx_ != scroll_position_idx_ + getScreenSize() - 2) return;
+    if (row_idx_ != scroll_position_idx_ + getScreenSize().first - 2) return;
     ++scroll_position_idx_;
     ++scroll_position_;
 }
@@ -101,7 +101,7 @@ void Cursor::scrollTo() {
     scroll_position_ = row_;
     scroll_position_idx_ = row_idx_;
 
-    int offset = row_idx_ - getScreenSize() - 2;
+    int offset = row_idx_ - getScreenSize().first - 2;
     for (int i = 0; i < offset; ++i) scrollUp();
 }
 

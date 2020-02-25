@@ -95,19 +95,29 @@ int Editor::writeFile(const char* filepath) {
 int Editor::printEditor() {
     clearScreen();
 
-    int screen_size = getScreenSize();
+    auto screen_size = getScreenSize();
+    const int screen_height = screen_size.first;
+    const int screen_width = screen_size.second;
+
     std::list<std::list<char> >::iterator row = cursor_->getScrollPosition().first;
     int row_idx = cursor_->getScrollPosition().second;
 
-    for (; screen_size - getConsoleCursor() - 1 > 0 && row != text_list_.end(); ++row_idx, ++row) {
+    for (; screen_height - getConsoleCursor() - 1 > 0 && row != text_list_.end(); ++row_idx, ++row) {
+        int digit_number = 0;
         if (show_line_number_) {
-            const int digit_number = log10(text_list_.size()) + 1;
+            digit_number = log10(text_list_.size()) + 2;
             printf("%*d ", digit_number, row_idx + 1);
         }
 
         int col_idx = 0;
+        int number_of_wordwrap = 1;
         std::list<char>::iterator col = (*row).begin();
         for (; col != (*row).end(); ++col_idx, ++col) {
+            if ((col_idx + (digit_number + 1 ) * number_of_wordwrap) % screen_width == 0) {
+                printf("\n");
+                if(show_line_number_) printf("%*c ", digit_number, ' ');
+                ++number_of_wordwrap;
+            }
             if (row_idx == cursor_->getRowIndex() && col_idx == cursor_->getColIndex()) {
                 printf("|");
             } else {
@@ -119,7 +129,7 @@ int Editor::printEditor() {
         printf("\n");
     }
 
-    int padding = screen_size - getConsoleCursor() - 1;
+    int padding = screen_height - getConsoleCursor() - 1;
     for (int i = 0; i < padding; ++i)
         printf("\n");
 
