@@ -125,7 +125,8 @@ void InputHandler::handleInput(Editor* editor) {
                 editor->moveCursorToUp();
                 break;
             }
-            case 'j': {
+            case 'j':
+            case '\r': {
                 editor->moveCursorToDown();
                 break;
             }
@@ -165,6 +166,8 @@ void InputHandler::handleInput(Editor* editor) {
             } else if (ch == -32) {
             } else if (prev_ch == -32) {
                 handleArrowKeys(editor, prev_ch, ch);
+            } else if (ch == '\r'){
+                if (editor->moveCursorToDown() != 0) editor->insertLine();
             } else {
                 editor->insertChar(ch);
             }
