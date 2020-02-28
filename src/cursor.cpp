@@ -65,6 +65,8 @@ int Cursor::moveToBeginning() {
 }
 
 int Cursor::moveToEnd() {
+    if (col_ == row_->end()) return 1;
+
     col_ = std::prev(row_->end());
     col_idx_ = row_->size() - 1;
 

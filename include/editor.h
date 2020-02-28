@@ -100,6 +100,12 @@ class Editor {
     int deleteChar();
 
     /**
+     * Delete character before current cursor position.
+     * @return          0 if the operation succeeded
+     */
+    int deleteCharBefore();
+
+    /**
      * Insert new line following the current line and add character there.
      * @return          0 if the operation succeeded
      */

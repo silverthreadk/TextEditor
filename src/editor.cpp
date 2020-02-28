@@ -198,6 +198,31 @@ int Editor::deleteChar() {
     return 0;
 }
 
+int Editor::deleteCharBefore() {
+    if (cursor_->getCol() != cursor_->getRow()->begin()) {
+        moveCursorToLeft();
+        cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol()));
+        return 0;
+    }
+
+    if (cursor_->getRow() == text_list_.begin()) return 1;
+
+    Cursor paste_cursor(cursor_->getRow(), cursor_->getCol());
+
+    moveCursorToUp();
+    moveCursorToEnd();
+
+    if (!paste_cursor.getRow()->empty()) {
+        cursor_->setCol(cursor_->getRow()->insert(cursor_->getRow()->end(), paste_cursor.getCol(), paste_cursor.getRow()->end()));
+        cursor_->incColIndex();
+        paste_cursor.getRow()->clear();
+    }
+
+    text_list_.erase(paste_cursor.getRow());
+
+    return 0;
+}
+
 int Editor::insertLine() {
     std::list<char> temp;
 
