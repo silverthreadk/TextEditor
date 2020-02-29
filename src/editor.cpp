@@ -28,7 +28,7 @@ int Editor::editFile() {
     if (filepath_ == NULL || (fp = fopen(filepath_, "r")) == NULL) {
         text_list_.push_back(temp);
 
-        cursor_ = new Cursor(text_list_.begin(), (*text_list_.begin()).begin());
+        cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
     } else {
         while (fscanf(fp, "%c", &c) != EOF) {
             if (c == '\n' || c == '\r') {
@@ -40,7 +40,7 @@ int Editor::editFile() {
         }
         text_list_.push_back(temp);
 
-        cursor_ = new Cursor(text_list_.begin(), (*text_list_.begin()).begin());
+        cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
 
         fclose(fp);
     }
@@ -52,14 +52,14 @@ int Editor::writeFile() {
     if (filepath_ == NULL) return 1;
 
     FILE *fp;
-    Cursor cursor(text_list_.begin(), (*text_list_.begin()).begin());
+    Cursor cursor(text_list_.begin(), (text_list_.begin())->begin());
 
     if ((fp = fopen(filepath_, "w")) == NULL) {
         return 1;
     } else {
         for (cursor.setRow(text_list_.begin()); cursor.getRow() != text_list_.end(); cursor.incRow()) {
-            for (cursor.setCol((*cursor.getRow()).begin()); cursor.getCol() != (*cursor.getRow()).end(); cursor.incCol()) {
-                fputc(*(cursor.getCol()), fp);
+            for (cursor.setCol(cursor.getRow()->begin()); cursor.getCol() != cursor.getRow()->end(); cursor.incCol()) {
+                fputc(*cursor.getCol(), fp);
             }
             fputc('\n', fp);
         }
@@ -73,14 +73,14 @@ int Editor::writeFile() {
 int Editor::writeFile(const char* filepath) {
     FILE *fp;
     filepath_ = filepath;
-    Cursor cursor(text_list_.begin(), (*text_list_.begin()).begin());
+    Cursor cursor(text_list_.begin(),(text_list_.begin())->begin());
 
     if ((fp = fopen(filepath, "w")) == NULL) {
         return 1;
     } else {
         for (cursor.setRow(text_list_.begin()); cursor.getRow() != text_list_.end(); cursor.incRow()) {
-            for (cursor.setCol((*cursor.getRow()).begin()); cursor.getCol() != (*cursor.getRow()).end(); cursor.incCol()) {
-                fputc(*(cursor.getCol()), fp);
+            for (cursor.setCol(cursor.getRow()->begin()); cursor.getCol() != cursor.getRow()->end(); cursor.incCol()) {
+                fputc(*cursor.getCol(), fp);
             }
             fputc('\n', fp);
         }
@@ -111,11 +111,11 @@ int Editor::printEditor() {
 
         int col_idx = 0;
         int number_of_wordwrap = 1;
-        std::list<char>::iterator col = (*row).begin();
-        for (; col != (*row).end(); ++col_idx, ++col) {
-            if ((col_idx + (digit_number + 1 ) * number_of_wordwrap) % screen_width == 0) {
+        std::list<char>::iterator col = row->begin();
+        for (; col != row->end(); ++col_idx, ++col) {
+            if ((col_idx + (digit_number + 1) * number_of_wordwrap) % screen_width == 0) {
                 printf("\n");
-                if(show_line_number_) printf("%*c ", digit_number, ' ');
+                if (show_line_number_) printf("%*c ", digit_number, ' ');
                 ++number_of_wordwrap;
             }
             if (row_idx == cursor_->getRowIndex() && col_idx == cursor_->getColIndex()) {
@@ -175,25 +175,23 @@ int Editor::moveCursorToSpecifiedLine(int n) {
     }
     cursor_->scrollTo();
 
-    cursor_->setCol((*cursor_->getRow()).begin());
+    cursor_->setCol(cursor_->getRow()->begin());
     cursor_->setColIndex(0);
 
     return 0;
 }
 
 int Editor::insertChar(const char c) {
-    cursor_->setCol(++(*cursor_->getRow()).insert(cursor_->getCol(), c));
+    cursor_->setCol(++cursor_->getRow()->insert(cursor_->getCol(), c));
     cursor_->incColIndex();
 
     return 0;
 }
 
 int Editor::deleteChar() {
-    if ((cursor_->getCol()) != (*cursor_->getRow()).end()) {
-        cursor_->setCol((*cursor_->getRow()).erase(cursor_->getCol()));
-    } else {
-        return 1;
-    }
+    if ((cursor_->getCol()) == cursor_->getRow()->end()) return 1;
+
+    cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol()));
 
     return 0;
 }
@@ -258,15 +256,15 @@ int Editor::deleteLine() {
     if (cursor_->getRow() == text_list_.end()) return 1;
 
     if (text_list_.size() == 1) {
-        (*cursor_->getRow()).clear();
-        cursor_->setCol((*cursor_->getRow()).begin());
+        cursor_->getRow()->clear();
+        cursor_->setCol(cursor_->getRow()->begin());
         cursor_->setColIndex(0);
 
         return 0;
     }
 
     cursor_->scrollUp();
-    (*cursor_->getRow()).clear();
+    cursor_->getRow()->clear();
     cursor_->setRow(text_list_.erase(cursor_->getRow()));
 
     if (cursor_->getRow() == text_list_.begin()) cursor_->setScrollPosition(text_list_.begin());
@@ -276,26 +274,26 @@ int Editor::deleteLine() {
         cursor_->decRowIndex();
     }
 
-    cursor_->setCol((*cursor_->getRow()).begin());
+    cursor_->setCol(cursor_->getRow()->begin());
     cursor_->setColIndex(0);
 
     return 0;
 }
 
 int Editor::deleteToBeginningOfLine() {
-    if ((cursor_->getCol()) != (*cursor_->getRow()).begin()) {
-        (*cursor_->getRow()).erase(cursor_->getRow()->begin(), cursor_->getCol());
-        cursor_->setColIndex(0);
-    } else {
-        return 1;
-    }
+    if ((cursor_->getCol()) == cursor_->getRow()->begin()) return 1;
+
+    cursor_->getRow()->erase(cursor_->getRow()->begin(), cursor_->getCol());
+    cursor_->setColIndex(0);
+
+    return 0;
 }
 
 int Editor::deleteToEndOfLine() {
-    if ((cursor_->getCol()) == (*cursor_->getRow()).end()) return 1;
+    if ((cursor_->getCol()) == cursor_->getRow()->end()) return 1;
 
-    cursor_->setCol((*cursor_->getRow()).erase(cursor_->getCol(), cursor_->getRow()->end()));
-    cursor_->setColIndex((*cursor_->getRow()).size() - 1);
+    cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol(), cursor_->getRow()->end()));
+    cursor_->setColIndex(cursor_->getRow()->size() - 1);
 
     return 0;
 }

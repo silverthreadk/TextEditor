@@ -134,7 +134,7 @@ void InputHandler::handleInput(Editor* editor) {
                 editor->moveCursorToRight();
                 break;
             }
-            case 'h': 
+            case 'h':
             case '\b': {
                 editor->moveCursorToLeft();
                 break;
@@ -181,7 +181,7 @@ void InputHandler::handleInput(Editor* editor) {
 
 void InputHandler::handleArrowKeys(Editor* editor, const char prev_ch, const char ch) {
     if (prev_ch != -32) return;
-    switch(ch) {
+    switch (ch) {
     case 'H': {
         editor->moveCursorToUp();
         break;

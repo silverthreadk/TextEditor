@@ -107,7 +107,6 @@ void Cursor::scrollTo() {
     for (int i = 0; i < offset; ++i) scrollUp();
 }
 
-//getter
 std::list<std::list<char> >::iterator Cursor::getRow() {
     return row_;
 }
