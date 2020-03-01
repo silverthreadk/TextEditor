@@ -7,6 +7,7 @@
 
 #include "editor.h"
 #include "utils.h"
+#include "string_utils.h"
 
 
 InputHandler::InputHandler() {
