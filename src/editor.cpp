@@ -1,9 +1,9 @@
 #include "editor.h"
 
 #include <stdio.h>
-#include <list>
 
 #include "cursor.h"
+#include "file_manager.h"
 #include "utils.h"
 
 
@@ -11,84 +11,32 @@ Editor::Editor(const char* filepath) {
     cursor_ = NULL;
     mode_ = MODE_COMMAND;
     show_line_number_ = false;
-    filepath_ = filepath;
+    file_manager_ = new FileManager(filepath, &text_list_);
 
     editFile();
 }
 
 Editor::~Editor() {
+    delete file_manager_;
     delete cursor_;
 }
 
 int Editor::editFile() {
-    FILE* fp;
-    char c;
-    std::list<char> temp;
+    int ret = file_manager_->edit();
+    cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
 
-    if (filepath_ == NULL || (fp = fopen(filepath_, "r")) == NULL) {
-        text_list_.push_back(temp);
-
-        cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
-    } else {
-        while (fscanf(fp, "%c", &c) != EOF) {
-            if (c == '\n' || c == '\r') {
-                text_list_.push_back(temp);
-                temp.clear();
-            } else {
-                temp.push_back(c);
-            }
-        }
-        text_list_.push_back(temp);
-
-        cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
-
-        fclose(fp);
-    }
-    return 0;
+    return ret;
 }
 
 
 int Editor::writeFile() {
-    if (filepath_ == NULL) return 1;
-
-    FILE *fp;
-    Cursor cursor(text_list_.begin(), (text_list_.begin())->begin());
-
-    if ((fp = fopen(filepath_, "w")) == NULL) {
-        return 1;
-    } else {
-        for (cursor.setRow(text_list_.begin()); cursor.getRow() != text_list_.end(); cursor.incRow()) {
-            for (cursor.setCol(cursor.getRow()->begin()); cursor.getCol() != cursor.getRow()->end(); cursor.incCol()) {
-                fputc(*cursor.getCol(), fp);
-            }
-            fputc('\n', fp);
-        }
-
-        fclose(fp);
-    }
-
-    return 0;
+    return file_manager_->write();
 }
 
 int Editor::writeFile(const char* filepath) {
-    FILE *fp;
-    filepath_ = filepath;
-    Cursor cursor(text_list_.begin(),(text_list_.begin())->begin());
+    if (file_manager_->changeFile(filepath) != 0) return 1;
 
-    if ((fp = fopen(filepath, "w")) == NULL) {
-        return 1;
-    } else {
-        for (cursor.setRow(text_list_.begin()); cursor.getRow() != text_list_.end(); cursor.incRow()) {
-            for (cursor.setCol(cursor.getRow()->begin()); cursor.getCol() != cursor.getRow()->end(); cursor.incCol()) {
-                fputc(*cursor.getCol(), fp);
-            }
-            fputc('\n', fp);
-        }
-
-        fclose(fp);
-    }
-
-    return 0;
+    return file_manager_->write();
 }
 
 

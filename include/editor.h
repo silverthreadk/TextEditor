@@ -3,6 +3,7 @@
 
 #include <list>
 
+class FileManager;
 class Cursor;
 
 class Editor {
@@ -142,12 +143,11 @@ class Editor {
     void setLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
 
  private:
+    FileManager* file_manager_;
     Cursor* cursor_;
     std::list<std::list<char> > text_list_;
     MODE mode_;
     bool show_line_number_;
-
-    const char* filepath_;
 };
 
 
