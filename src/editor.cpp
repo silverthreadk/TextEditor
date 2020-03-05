@@ -4,14 +4,14 @@
 
 #include "cursor.h"
 #include "file_manager.h"
-#include "utils.h"
+#include "screen.h"
 
 
 Editor::Editor(const char* filepath) {
     cursor_ = NULL;
-    mode_ = MODE_COMMAND;
-    show_line_number_ = false;
+    mode_ = EDITOR_MODE::COMMAND;
     file_manager_ = new FileManager(filepath, &text_list_);
+    screen_ = new Screen(&text_list_, &cursor_, &mode_);
 
     editFile();
 }
@@ -19,6 +19,7 @@ Editor::Editor(const char* filepath) {
 Editor::~Editor() {
     delete file_manager_;
     delete cursor_;
+    delete screen_;
 }
 
 int Editor::editFile() {
@@ -41,50 +42,7 @@ int Editor::writeFile(const char* filepath) {
 
 
 int Editor::printEditor() {
-    clearScreen();
-
-    auto screen_size = getScreenSize();
-    const int screen_height = screen_size.first;
-    const int screen_width = screen_size.second;
-
-    std::list<std::list<char> >::iterator row = cursor_->getScrollPosition().first;
-    int row_idx = cursor_->getScrollPosition().second;
-
-    for (; screen_height - getConsoleCursor() - 1 > 0 && row != text_list_.end(); ++row_idx, ++row) {
-        int digit_number = 0;
-        if (show_line_number_) {
-            digit_number = log10(text_list_.size()) + 2;
-            printf("%*d ", digit_number, row_idx + 1);
-        }
-
-        int col_idx = 0;
-        int number_of_wordwrap = 1;
-        std::list<char>::iterator col = row->begin();
-        for (; col != row->end(); ++col_idx, ++col) {
-            if ((col_idx + (digit_number + 1) * number_of_wordwrap) % screen_width == 0) {
-                printf("\n");
-                if (show_line_number_) printf("%*c ", digit_number, ' ');
-                ++number_of_wordwrap;
-            }
-            if (row_idx == cursor_->getRowIndex() && col_idx == cursor_->getColIndex()) {
-                printf("|");
-            } else {
-                printf("%c", *(col));
-            }
-        }
-        if (row_idx == cursor_->getRowIndex() && col_idx == cursor_->getColIndex()) printf("|");
-
-        printf("\n");
-    }
-
-    int padding = screen_height - getConsoleCursor() - 1;
-    for (int i = 0; i < padding; ++i)
-        printf("\n");
-
-    if (mode_ == MODE_LAST_LINE) {
-        printf(":");
-    }
-    return 0;
+    return screen_->print();
 }
 
 int Editor::moveCursorToLeft() {
@@ -92,7 +50,7 @@ int Editor::moveCursorToLeft() {
 }
 
 int Editor::moveCursorToRight() {
-    return cursor_->moveToRight(mode_ == MODE_INSERT);
+    return cursor_->moveToRight(mode_ == EDITOR_MODE::INSERT);
 }
 
 int Editor::moveCursorToUp() {
@@ -180,7 +138,7 @@ int Editor::insertLine() {
 
     cursor_->moveToBeginning();
 
-    mode_ = MODE_INSERT;
+    mode_ = EDITOR_MODE::INSERT;
 
     return 0;
 }
@@ -195,7 +153,7 @@ int Editor::insertLineBefore() {
     cursor_->moveToBeginning();
     cursor_->moveToUp();
 
-    mode_ = MODE_INSERT;
+    mode_ = EDITOR_MODE::INSERT;
 
     return 0;
 }
@@ -244,4 +202,8 @@ int Editor::deleteToEndOfLine() {
     cursor_->setColIndex(cursor_->getRow()->size() - 1);
 
     return 0;
+}
+
+void Editor::setShowLineNumber(bool show_line_number) {
+    screen_->setShowLineNumber(show_line_number);;
 }

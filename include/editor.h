@@ -3,17 +3,14 @@
 
 #include <list>
 
+#include "editor_enum.h"
+
 class FileManager;
 class Cursor;
+class Screen;
 
 class Editor {
  public:
-    enum MODE {
-        MODE_COMMAND = 0,
-        MODE_INSERT,
-        MODE_LAST_LINE,
-        MODE_END
-    };
 
     explicit Editor(const char* filepath);
 
@@ -136,18 +133,18 @@ class Editor {
      */
     int deleteToEndOfLine();
 
-    void setMode(MODE mode) { this->mode_ = mode; }
+    void setMode(EDITOR_MODE mode) { this->mode_ = mode; }
 
-    MODE getMode() { return mode_; }
+    EDITOR_MODE getMode() { return mode_; }
 
-    void setLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
+    void setShowLineNumber(bool show_line_number);
 
  private:
     FileManager* file_manager_;
     Cursor* cursor_;
+    Screen* screen_;
     std::list<std::list<char> > text_list_;
-    MODE mode_;
-    bool show_line_number_;
+    EDITOR_MODE mode_;
 };
 
 

@@ -6,7 +6,6 @@
 #include <regex>
 
 #include "editor.h"
-#include "utils.h"
 #include "string_utils.h"
 
 
@@ -24,9 +23,9 @@ void InputHandler::handleInput(Editor* editor) {
     std::smatch m;
     std::regex pattern("([\\S]*)\\s?([\\W*\\w*]*)?");
 
-    while (editor->getMode() < Editor::MODE_END) {
+    while (editor->getMode() < EDITOR_MODE::END) {
         editor->printEditor();
-        if (editor->getMode() == Editor::MODE_LAST_LINE) {
+        if (editor->getMode() == EDITOR_MODE::LAST_LINE) {
             std::string input, command1, command2, str;
             getline(std::cin, input);
 
@@ -36,50 +35,50 @@ void InputHandler::handleInput(Editor* editor) {
                 str = m[2].str();
             }
             if (command1 == "q") {
-                editor->setMode(Editor::MODE_END);
+                editor->setMode(EDITOR_MODE::END);
                 break;
             } else if (command1 == "w") {
                 editor->writeFile();
             } else if (command1 == "wq") {
-                editor->setMode(Editor::MODE_END);
+                editor->setMode(EDITOR_MODE::END);
                 editor->writeFile();
                 break;
             } else if (command2 == "wq") {
                 editor->writeFile(str.c_str());
             } else if (command1 == "set nu" || command1 == "set number") {
-                editor->setLineNumber(true);
+                editor->setShowLineNumber(true);
             } else if (command1 == "set nonumber") {
-                editor->setLineNumber(false);
+                editor->setShowLineNumber(false);
             } else if (isDigit(command1)) {
                 int n = std::stoi(command1);
                 editor->moveCursorToSpecifiedLine(n-1);
             }
-            editor->setMode(Editor::MODE_COMMAND);
+            editor->setMode(EDITOR_MODE::COMMAND);
             ch = 0;
-        } else if (editor->getMode() == Editor::MODE_COMMAND) {
+        } else if (editor->getMode() == EDITOR_MODE::COMMAND) {
             ch = getch();
             switch (ch) {
             case ':': {
-                editor->setMode(Editor::MODE_LAST_LINE);
+                editor->setMode(EDITOR_MODE::LAST_LINE);
                 break;
             }
             case 'a': {
-                editor->setMode(Editor::MODE_INSERT);
+                editor->setMode(EDITOR_MODE::INSERT);
                 editor->moveCursorToRight();
                 break;
             }
             case 'A': {
                 editor->moveCursorToEnd();
-                editor->setMode(Editor::MODE_INSERT);
+                editor->setMode(EDITOR_MODE::INSERT);
                 break;
             }
             case 'i': {
-                editor->setMode(Editor::MODE_INSERT);
+                editor->setMode(EDITOR_MODE::INSERT);
                 break;
             }
             case 'I': {
                 editor->moveCursorToBeginning();
-                editor->setMode(Editor::MODE_INSERT);
+                editor->setMode(EDITOR_MODE::INSERT);
                 break;
             }
             case 'x': {
@@ -160,11 +159,11 @@ void InputHandler::handleInput(Editor* editor) {
             } else {
                 num = "";
             }
-        } else if (editor->getMode() == Editor::MODE_INSERT) {
+        } else if (editor->getMode() == EDITOR_MODE::INSERT) {
             ch = getch();
             if (ch == 27) {  // ESC
                 editor->moveCursorToLeft();
-                editor->setMode(Editor::MODE_COMMAND);
+                editor->setMode(EDITOR_MODE::COMMAND);
             } else if (ch == -32) {
             } else if (prev_ch == -32) {
                 handleArrowKeys(editor, prev_ch, ch);

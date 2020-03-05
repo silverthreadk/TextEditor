@@ -2,8 +2,7 @@
 
 #include <algorithm>
 
-#include "utils.h"
-
+#include "screen_utils.h"
 
 Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::iterator col) {
     row_idx_ = 0;
