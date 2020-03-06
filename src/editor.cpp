@@ -7,12 +7,11 @@
 #include "screen.h"
 
 
-Editor::Editor(const char* filepath) {
-    cursor_ = NULL;
-    mode_ = EDITOR_MODE::COMMAND;
-    file_manager_ = new FileManager(filepath, &text_list_);
-    screen_ = new Screen(&text_list_, &cursor_, &mode_);
-
+Editor::Editor(const char* filepath)
+    : file_manager_(new FileManager(filepath, &text_list_)),
+    cursor_(nullptr),
+    screen_(new Screen(&text_list_, &cursor_, &mode_)),
+    mode_(EDITOR_MODE::COMMAND) {
     editFile();
 }
 

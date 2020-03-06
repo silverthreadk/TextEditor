@@ -4,15 +4,13 @@
 
 #include "screen_utils.h"
 
-Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::iterator col) {
-    row_idx_ = 0;
-    col_idx_ = 0;
-
-    row_ = row;
-    col_ = col;
-
-    scroll_position_ = row;
-    scroll_position_idx_ = 0;
+Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::iterator col)
+    : row_(row),
+    col_(col),
+    row_idx_(0),
+    col_idx_(0),
+    scroll_position_(row),
+    scroll_position_idx_(0) {
 }
 Cursor::~Cursor() {
 }
