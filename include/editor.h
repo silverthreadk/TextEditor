@@ -23,6 +23,12 @@ class Editor {
     int editFile();
 
     /**
+     * Edit the file in a specific file path.
+     * @return          0 if the operation succeeded
+     */
+    int editFile(const char* filepath);
+
+    /**
      * Write the file in the file path.
      * @return          0 if the operation succeeded
      */

@@ -28,6 +28,15 @@ int Editor::editFile() {
     return ret;
 }
 
+int Editor::editFile(const char* filepath) {
+    if (file_manager_->changeFile(filepath) != 0) return 1;
+
+    int ret = file_manager_->edit();
+    cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
+
+    return ret;
+}
+
 
 int Editor::writeFile() {
     return file_manager_->write();

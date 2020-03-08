@@ -45,6 +45,8 @@ void InputHandler::handleInput(Editor* editor) {
                 break;
             } else if (command2 == "wq") {
                 editor->writeFile(str.c_str());
+            } else if (command2 == "e") {
+                editor->editFile(str.c_str());
             } else if (command1 == "set nu" || command1 == "set number") {
                 editor->setShowLineNumber(true);
             } else if (command1 == "set nonumber") {
