@@ -125,8 +125,8 @@ int Editor::deleteCharBefore() {
     moveCursorToEnd();
 
     if (!paste_cursor.getRow()->empty()) {
+        if (!cursor_->getRow()->empty()) cursor_->incColIndex();
         cursor_->setCol(cursor_->getRow()->insert(cursor_->getRow()->end(), paste_cursor.getCol(), paste_cursor.getRow()->end()));
-        cursor_->incColIndex();
         paste_cursor.getRow()->clear();
     }
 
