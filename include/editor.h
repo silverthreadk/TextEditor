@@ -90,6 +90,12 @@ class Editor {
      */
     int moveCursorToSpecifiedLine(int n);
 
+    /*
+     * Move cursor to the right one word.
+     * @return          0 if the operation succeeded
+     */
+    int moveCursorToRightOneWord();
+
     /**
      * Insert character before the current cursor position.
      * @param c         character to append

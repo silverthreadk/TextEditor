@@ -95,6 +95,23 @@ int Editor::moveCursorToSpecifiedLine(int n) {
     return 0;
 }
 
+int Editor::moveCursorToRightOneWord() {
+    if (cursor_->getRow()->empty() || cursor_->getCol() == std::prev(cursor_->getRow()->end())) {
+        moveCursorToDown();
+        moveCursorToBeginning();
+        return 0;
+    }
+
+    bool previous_space = *cursor_->getCol() == ' ';
+    int ret = 0;
+    while ((ret = cursor_->moveToRight(false)) == 0) {
+        if (previous_space && *cursor_->getCol() != ' ') break;
+        previous_space = *cursor_->getCol() == ' ';
+    }
+
+    return 0;
+}
+
 int Editor::insertChar(const char c) {
     cursor_->setCol(++cursor_->getRow()->insert(cursor_->getCol(), c));
     cursor_->incColIndex();

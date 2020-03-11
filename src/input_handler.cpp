@@ -83,6 +83,10 @@ void InputHandler::handleInput(Editor* editor) {
                 editor->setMode(EDITOR_MODE::INSERT);
                 break;
             }
+            case 'w': {
+                editor->moveCursorToRightOneWord();
+                break;
+            }
             case 'x': {
                 editor->deleteChar();
                 break;
