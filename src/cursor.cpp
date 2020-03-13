@@ -55,6 +55,8 @@ int Cursor::moveToDown(const int row_size) {
 }
 
 int Cursor::moveToBeginning() {
+    if (col_idx_ <= 0) return 1;
+
     col_ = row_->begin();
     col_idx_ = 0;
 
