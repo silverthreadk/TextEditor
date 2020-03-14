@@ -168,6 +168,28 @@ int Editor::deleteCharBefore() {
     return 0;
 }
 
+int Editor::deleteWord() {
+    if (cursor_->getRow()->empty()) {
+        deleteLine();
+        return 0;
+    }
+    if (cursor_->getCol() == cursor_->getRow()->end()) {
+        return 1;
+    }
+    if (cursor_->getCol() == std::prev(cursor_->getRow()->end())) {
+        deleteChar();
+        return 0;
+    }
+
+    bool previous_space = *cursor_->getCol() == ' ';
+    while (deleteChar() == 0) {
+        if (cursor_->getCol() == cursor_->getRow()->end()) break;
+        if (previous_space ^ *cursor_->getCol() == ' ') break;
+    }
+
+    return 0;
+}
+
 int Editor::insertLine() {
     std::list<char> temp;
 

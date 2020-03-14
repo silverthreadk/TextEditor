@@ -84,7 +84,11 @@ void InputHandler::handleInput(Editor* editor) {
                 break;
             }
             case 'w': {
-                editor->moveCursorToRightOneWord();
+                if (prev_ch == 'd') {
+                    editor->deleteWord();
+                } else {
+                    editor->moveCursorToRightOneWord();
+                }
                 break;
             }
             case 'b': {
