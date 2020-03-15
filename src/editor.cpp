@@ -199,7 +199,8 @@ int Editor::insertLine() {
     cursor_->setRow(text_list_.insert(cursor_->getRow(), temp));
     cursor_->incRowIndex();
 
-    cursor_->moveToBeginning();
+    cursor_->setCol(cursor_->getRow()->begin());
+    cursor_->setColIndex(0);
 
     mode_ = EDITOR_MODE::INSERT;
 
