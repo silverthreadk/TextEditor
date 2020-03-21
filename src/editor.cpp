@@ -190,6 +190,30 @@ int Editor::deleteWord() {
     return 0;
 }
 
+int Editor::deleteWordBefore() {
+    if (cursor_->getCol() == cursor_->getRow()->begin()) {
+        if (cursor_->getRow() == text_list_.begin()) return 1;
+        moveCursorToUp();
+        moveCursorToEnd();
+    }
+
+    if (cursor_->getCol() == cursor_->getRow()->begin()) {
+        deleteLine();
+        return 0;
+    }
+
+    bool previous_text = *cursor_->getCol() != ' ';
+    cursor_->moveToRight(true);
+    while (deleteCharBefore() == 0) {
+        if (cursor_->getCol() == cursor_->getRow()->begin()) break;
+        if (!previous_text && *std::prev(cursor_->getCol()) != ' ') break;
+        previous_text = *std::prev(cursor_->getCol()) != ' ';
+    }
+    cursor_->moveToLeft();
+
+    return 0;
+}
+
 int Editor::insertLine() {
     std::list<char> temp;
 
