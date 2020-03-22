@@ -158,8 +158,10 @@ void InputHandler::handleInput(Editor* editor) {
                 break;
             }
             case 'G': {
-                int n = std::stoi(num);
-                editor->moveCursorToSpecifiedLine(n - 1);
+                if (isDigit(num)) {
+                    const int n = std::stoi(num);
+                    editor->moveCursorToSpecifiedLine(n - 1);
+                }
                 break;
             }
             }
