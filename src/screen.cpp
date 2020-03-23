@@ -52,14 +52,18 @@ int Screen::print() {
         printf("\n");
     }
 
-    int padding = screen_height - getConsoleCursor() - 1;
-    for (int i = 0; i < padding; ++i)
-        printf("\n");
+    printPadding();
 
     if (*mode_ == EDITOR_MODE::LAST_LINE) {
         printf(":");
     }
 
     return 0;
+}
+
+void Screen::printPadding() {
+    const int padding = getScreenSize().first - getConsoleCursor() - 1;
+    for (int i = 0; i < padding; ++i)
+        printf("~\n");
 }
 

@@ -16,6 +16,8 @@ class Screen {
     void setShowLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
 
  private:
+    void printPadding();
+
     std::list<std::list<char> >* text_list_;
     Cursor** cursor_;
     EDITOR_MODE* mode_;
