@@ -180,23 +180,45 @@ void InputHandler::handleInput(Editor* editor) {
                 num = "";
             }
         } else if (editor->getMode() == EDITOR_MODE::INSERT) {
-            ch = getch();
-            if (ch == 27) {  // ESC
-                editor->moveCursorToLeft();
-                editor->setMode(EDITOR_MODE::COMMAND);
-            } else if (ch == -32) {
-            } else if (prev_ch == -32) {
-                handleArrowKeys(editor, prev_ch, ch);
-            } else if (ch == '\r') {
-                if (editor->moveCursorToDown() != 0) editor->insertLine();
-            } else if (ch == '\b') {
-                editor->deleteCharBefore();
-            } else {
-                editor->insertChar(ch);
-            }
-            prev_ch = ch;
+            handleInputInInsertMode(editor, &prev_ch);
         }
     }
+}
+
+void InputHandler::handleInputInInsertMode(Editor* editor, char* prev_ch) {
+    if (editor->getMode() != EDITOR_MODE::INSERT) return;
+
+    const char ch = getch();
+
+    if (*prev_ch == -32) {
+        handleArrowKeys(editor, *prev_ch, ch);
+        return;
+    }
+
+    switch (ch) {
+    case 27: {
+        editor->moveCursorToLeft();
+        editor->setMode(EDITOR_MODE::COMMAND);
+        break;
+    }
+    case -32: {
+        break;
+    }
+    case '\r': {
+        if (editor->moveCursorToDown() != 0) editor->insertLine();
+        break;
+    }
+    case '\b': {
+        editor->deleteCharBefore();
+        break;
+    }
+    default: {
+        editor->insertChar(ch);
+        break;
+    }
+    }
+
+    *prev_ch = ch;
 }
 
 void InputHandler::handleArrowKeys(Editor* editor, const char prev_ch, const char ch) {
