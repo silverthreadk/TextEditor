@@ -16,7 +16,6 @@ InputHandler::~InputHandler() {
 }
 
 void InputHandler::handleInput(Editor* editor) {
-    char ch = 0;
     char prev_ch = 0;
     std::string num = "";
 
@@ -56,132 +55,137 @@ void InputHandler::handleInput(Editor* editor) {
                 editor->moveCursorToSpecifiedLine(n-1);
             }
             editor->setMode(EDITOR_MODE::COMMAND);
-            ch = 0;
         } else if (editor->getMode() == EDITOR_MODE::COMMAND) {
-            ch = getch();
-            switch (ch) {
-            case ':': {
-                editor->setMode(EDITOR_MODE::LAST_LINE);
-                break;
-            }
-            case 'a': {
-                editor->setMode(EDITOR_MODE::INSERT);
-                editor->moveCursorToRight();
-                break;
-            }
-            case 'A': {
-                editor->moveCursorToEnd();
-                editor->setMode(EDITOR_MODE::INSERT);
-                break;
-            }
-            case 'i': {
-                editor->setMode(EDITOR_MODE::INSERT);
-                break;
-            }
-            case 'I': {
-                editor->moveCursorToBeginning();
-                editor->setMode(EDITOR_MODE::INSERT);
-                break;
-            }
-            case 'w': {
-                if (prev_ch == 'd') {
-                    editor->deleteWord();
-                } else {
-                    editor->moveCursorToRightOneWord();
-                }
-                break;
-            }
-            case 'b': {
-                if (prev_ch == 'd') {
-                    editor->deleteWordBefore();
-                } else {
-                    editor->moveCursorToLeftOneWord();
-                }
-                break;
-            }
-            case 'x': {
-                editor->deleteChar();
-                break;
-            }
-            case 'o': {
-                editor->insertLine();
-                break;
-            }
-            case 'O': {
-                editor->insertLineBefore();
-                break;
-            }
-            case 'd': {
-                if (prev_ch == 'd') {
-                    editor->deleteLine();
-                }
-                break;
-            }
-            case '0': {
-                if (num.empty()) {
-                    editor->moveCursorToBeginning();
-                } else {
-                    num += ch;
-                }
-                break;
-            }
-            case '^': {
-                if (prev_ch == 'd') {
-                    editor->deleteToBeginningOfLine();
-                }
-                break;
-            }
-            case '$': {
-                if (prev_ch == 'd') {
-                    editor->deleteToEndOfLine();
-                } else {
-                    editor->moveCursorToEnd();
-                }
-                break;
-            }
-            case 'k': {
-                editor->moveCursorToUp();
-                break;
-            }
-            case 'j':
-            case '\r': {
-                editor->moveCursorToDown();
-                break;
-            }
-            case 'l': {
-                editor->moveCursorToRight();
-                break;
-            }
-            case 'h':
-            case '\b': {
-                editor->moveCursorToLeft();
-                break;
-            }
-            case 'G': {
-                if (isDigit(num)) {
-                    const int n = std::stoi(num);
-                    editor->moveCursorToSpecifiedLine(n - 1);
-                }
-                break;
-            }
-            }
-
-            handleArrowKeys(editor, prev_ch, ch);
-
-            if (prev_ch == 'd' && ch == 'd') {
-                prev_ch = 0;
-            } else {
-                prev_ch = ch;
-            }
-
-            if (ch >= '1' && ch <= '9') {
-                num += ch;
-            } else {
-                num = "";
-            }
+            handleInputInCommandMode(editor, &prev_ch, &num);
         } else if (editor->getMode() == EDITOR_MODE::INSERT) {
             handleInputInInsertMode(editor, &prev_ch);
         }
+    }
+}
+
+void InputHandler::handleInputInCommandMode(Editor* editor, char* prev_ch, std::string* num) {
+    if (editor->getMode() != EDITOR_MODE::COMMAND) return;
+
+    const char ch = getch();
+    switch (ch) {
+    case ':': {
+        editor->setMode(EDITOR_MODE::LAST_LINE);
+        break;
+    }
+    case 'a': {
+        editor->setMode(EDITOR_MODE::INSERT);
+        editor->moveCursorToRight();
+        break;
+    }
+    case 'A': {
+        editor->moveCursorToEnd();
+        editor->setMode(EDITOR_MODE::INSERT);
+        break;
+    }
+    case 'i': {
+        editor->setMode(EDITOR_MODE::INSERT);
+        break;
+    }
+    case 'I': {
+        editor->moveCursorToBeginning();
+        editor->setMode(EDITOR_MODE::INSERT);
+        break;
+    }
+    case 'w': {
+        if (*prev_ch == 'd') {
+            editor->deleteWord();
+        } else {
+            editor->moveCursorToRightOneWord();
+        }
+        break;
+    }
+    case 'b': {
+        if (*prev_ch == 'd') {
+            editor->deleteWordBefore();
+        } else {
+            editor->moveCursorToLeftOneWord();
+        }
+        break;
+    }
+    case 'x': {
+        editor->deleteChar();
+        break;
+    }
+    case 'o': {
+        editor->insertLine();
+        break;
+    }
+    case 'O': {
+        editor->insertLineBefore();
+        break;
+    }
+    case 'd': {
+        if (*prev_ch == 'd') {
+            editor->deleteLine();
+        }
+        break;
+    }
+    case '0': {
+        if (num->empty()) {
+            editor->moveCursorToBeginning();
+        } else {
+            num += ch;
+        }
+        break;
+    }
+    case '^': {
+        if (*prev_ch == 'd') {
+            editor->deleteToBeginningOfLine();
+        }
+        break;
+    }
+    case '$': {
+        if (*prev_ch == 'd') {
+            editor->deleteToEndOfLine();
+        } else {
+            editor->moveCursorToEnd();
+        }
+        break;
+    }
+    case 'k': {
+        editor->moveCursorToUp();
+        break;
+    }
+    case 'j':
+    case '\r': {
+        editor->moveCursorToDown();
+        break;
+    }
+    case 'l': {
+        editor->moveCursorToRight();
+        break;
+    }
+    case 'h':
+    case '\b': {
+        editor->moveCursorToLeft();
+        break;
+    }
+    case 'G': {
+        if (isDigit(*num)) {
+            const int n = std::stoi(*num);
+            editor->moveCursorToSpecifiedLine(n - 1);
+        }
+        break;
+    }
+    }
+
+    handleArrowKeys(editor, *prev_ch, ch);
+
+    if (*prev_ch == 'd' && ch == 'd') {
+        *prev_ch = 0;
+    } else {
+        *prev_ch = ch;
+    }
+
+    if (ch >= '1' && ch <= '9') {
+        *num += ch;
+    } else {
+        *num = "";
     }
 }
 
