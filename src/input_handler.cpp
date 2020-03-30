@@ -19,48 +19,56 @@ void InputHandler::handleInput(Editor* editor) {
     char prev_ch = 0;
     std::string num = "";
 
-    std::smatch m;
-    std::regex pattern("([\\S]*)\\s?([\\W*\\w*]*)?");
-
     while (editor->getMode() < EDITOR_MODE::END) {
         editor->printEditor();
         if (editor->getMode() == EDITOR_MODE::LAST_LINE) {
-            std::string input, command1, command2, str;
-            getline(std::cin, input);
-
-            if (regex_match(input, m, pattern)) {
-                command1 = m[0].str();
-                command2 = (m[0].str() == m[1].str()) ? "" : m[1].str();
-                str = m[2].str();
-            }
-            if (command1 == "q") {
-                editor->setMode(EDITOR_MODE::END);
-                break;
-            } else if (command1 == "w") {
-                editor->writeFile();
-            } else if (command1 == "wq") {
-                editor->setMode(EDITOR_MODE::END);
-                editor->writeFile();
-                break;
-            } else if (command2 == "wq") {
-                editor->writeFile(str.c_str());
-            } else if (command2 == "e") {
-                editor->editFile(str.c_str());
-            } else if (command1 == "set nu" || command1 == "set number") {
-                editor->setShowLineNumber(true);
-            } else if (command1 == "set nonumber") {
-                editor->setShowLineNumber(false);
-            } else if (isDigit(command1)) {
-                int n = std::stoi(command1);
-                editor->moveCursorToSpecifiedLine(n-1);
-            }
-            editor->setMode(EDITOR_MODE::COMMAND);
+            handleInputInLastLineMode(editor);
         } else if (editor->getMode() == EDITOR_MODE::COMMAND) {
             handleInputInCommandMode(editor, &prev_ch, &num);
         } else if (editor->getMode() == EDITOR_MODE::INSERT) {
             handleInputInInsertMode(editor, &prev_ch);
         }
     }
+}
+
+void InputHandler::handleInputInLastLineMode(Editor* editor) {
+    if (editor->getMode() != EDITOR_MODE::LAST_LINE) return;
+
+    std::string input, command1, command2, str;
+    getline(std::cin, input);
+
+    std::smatch m;
+    std::regex pattern("([\\S]*)\\s?([\\W*\\w*]*)?");
+    if (regex_match(input, m, pattern)) {
+        command1 = m[0].str();
+        command2 = (m[0].str() == m[1].str()) ? "" : m[1].str();
+        str = m[2].str();
+    }
+
+    if (command1 == "q") {
+        editor->setMode(EDITOR_MODE::END);
+        return;
+    } else if (command1 == "w") {
+        editor->writeFile();
+    } else if (command1 == "wq") {
+        editor->setMode(EDITOR_MODE::END);
+        editor->writeFile();
+        return;
+    } else if (command2 == "wq") {
+        editor->writeFile(str.c_str());
+        return;
+    } else if (command2 == "e") {
+        editor->editFile(str.c_str());
+    } else if (command1 == "set nu" || command1 == "set number") {
+        editor->setShowLineNumber(true);
+    } else if (command1 == "set nonumber") {
+        editor->setShowLineNumber(false);
+    } else if (isDigit(command1)) {
+        int n = std::stoi(command1);
+        editor->moveCursorToSpecifiedLine(n - 1);
+    }
+
+    editor->setMode(EDITOR_MODE::COMMAND);
 }
 
 void InputHandler::handleInputInCommandMode(Editor* editor, char* prev_ch, std::string* num) {

@@ -17,6 +17,7 @@ class InputHandler {
     void handleInput(Editor* editor);
 
  private:
+    void handleInputInLastLineMode(Editor* editor);
     void handleInputInCommandMode(Editor* editor, char* prev_ch, std::string* num);
     void handleInputInInsertMode(Editor* editor, char* prev_ch);
     void handleArrowKeys(Editor* editor, const char prev_ch, const char ch);
