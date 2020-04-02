@@ -5,6 +5,10 @@
 #include "cursor.h"
 #include "screen_utils.h"
 
+static int getDigitNumber(std::list<std::list<char> >* text_list) {
+    return log10(text_list->size());
+}
+
 Screen::Screen(std::list<std::list<char> >* text_list, Cursor** cursor, EDITOR_MODE* mode)
     : text_list_(text_list),
       cursor_(cursor),
@@ -26,19 +30,16 @@ int Screen::print() {
     int row_idx = (*cursor_)->getScrollPosition().second;
 
     for (; screen_height - getConsoleCursor() - 1 > 0 && row != text_list_->end(); ++row_idx, ++row) {
-        int digit_number = 0;
-        if (show_line_number_) {
-            digit_number = log10(text_list_->size()) + 2;
-            printf("%*d ", digit_number, row_idx + 1);
-        }
+        int line_number_width = show_line_number_ ? getDigitNumber(text_list_) + 2 : 0;
+        printLineNumber(line_number_width, row_idx);
 
         int col_idx = 0;
         int number_of_wordwrap = 1;
         std::list<char>::iterator col = row->begin();
         for (; col != row->end(); ++col_idx, ++col) {
-            if ((col_idx + (digit_number + 1) * number_of_wordwrap) % screen_width == 0) {
+            if ((col_idx + (line_number_width + 1) * number_of_wordwrap) % screen_width == 0) {
                 printf("\n");
-                if (show_line_number_) printf("%*c ", digit_number, ' ');
+                printLineNumberPadding(line_number_width);
                 ++number_of_wordwrap;
             }
             if (row_idx == (*cursor_)->getRowIndex() && col_idx == (*cursor_)->getColIndex()) {
@@ -61,9 +62,20 @@ int Screen::print() {
     return 0;
 }
 
+void Screen::printLineNumber(int line_number_width, int row_idx) {
+    if (!show_line_number_) return;
+
+    printf("%*d ", line_number_width, row_idx + 1);
+}
+
+void Screen::printLineNumberPadding(int line_number_width) {
+    if (!show_line_number_) return;
+
+    printf("%*c ", line_number_width, ' ');
+}
+
 void Screen::printPadding() {
     const int padding = getScreenSize().first - getConsoleCursor() - 1;
     for (int i = 0; i < padding; ++i)
         printf("~\n");
 }
-
