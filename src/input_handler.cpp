@@ -61,7 +61,7 @@ void InputHandler::handleInputInLastLineMode(Editor* editor) {
         editor->editFile(str.c_str());
     } else if (command1 == "set nu" || command1 == "set number") {
         editor->setShowLineNumber(true);
-    } else if (command1 == "set nonumber") {
+    } else if (command1 == "set nonu" || command1 == "set nonumber") {
         editor->setShowLineNumber(false);
     } else if (isDigit(command1)) {
         int n = std::stoi(command1);
