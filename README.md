@@ -1,6 +1,8 @@
 ## TextEditor
 VI-like text editor
 
+<img src="resource/images/screenshot.png">
+
 ## Getting Started
 
 ### Prerequisites
