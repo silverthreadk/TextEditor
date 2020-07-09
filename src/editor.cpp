@@ -8,22 +8,19 @@
 
 
 Editor::Editor(const char* filepath)
-    : file_manager_(new FileManager(filepath, &text_list_)),
+    : file_manager_(std::unique_ptr<FileManager>(new FileManager(filepath, &text_list_))),
     cursor_(nullptr),
-    screen_(new Screen(&text_list_, &cursor_, &mode_)),
+    screen_(std::unique_ptr<Screen>(new Screen(&text_list_, &mode_))),
     mode_(EDITOR_MODE::COMMAND) {
     editFile();
 }
 
 Editor::~Editor() {
-    delete file_manager_;
-    delete cursor_;
-    delete screen_;
 }
 
 int Editor::editFile() {
     int ret = file_manager_->edit();
-    cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
+    cursor_ = std::unique_ptr<Cursor>(new Cursor(text_list_.begin(), (text_list_.begin())->begin()));
 
     return ret;
 }
@@ -32,7 +29,7 @@ int Editor::editFile(const char* filepath) {
     if (file_manager_->changeFile(filepath) != 0) return 1;
 
     int ret = file_manager_->edit();
-    cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
+    cursor_ = std::unique_ptr<Cursor>(new Cursor(text_list_.begin(), (text_list_.begin())->begin()));
 
     return ret;
 }
@@ -50,7 +47,7 @@ int Editor::writeFile(const char* filepath) {
 
 
 int Editor::printEditor() {
-    return screen_->print();
+    return screen_->print(cursor_.get());
 }
 
 int Editor::moveCursorToLeft() {

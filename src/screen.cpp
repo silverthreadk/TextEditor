@@ -9,9 +9,8 @@ static int getDigitNumber(std::list<std::list<char> >* text_list) {
     return log10(text_list->size());
 }
 
-Screen::Screen(std::list<std::list<char> >* text_list, Cursor** cursor, EDITOR_MODE* mode)
+Screen::Screen(std::list<std::list<char> >* text_list, EDITOR_MODE* mode)
     : text_list_(text_list),
-      cursor_(cursor),
       mode_(mode),
       show_line_number_(false) {
 }
@@ -19,15 +18,15 @@ Screen::Screen(std::list<std::list<char> >* text_list, Cursor** cursor, EDITOR_M
 Screen::~Screen() {
 }
 
-int Screen::print() {
+int Screen::print(Cursor* cursor) {
     clearScreen();
 
     auto screen_size = getScreenSize();
     const int screen_height = screen_size.first;
     const int screen_width = screen_size.second;
 
-    std::list<std::list<char> >::iterator row = (*cursor_)->getScrollPosition().first;
-    int row_idx = (*cursor_)->getScrollPosition().second;
+    std::list<std::list<char> >::iterator row = cursor->getScrollPosition().first;
+    int row_idx = cursor->getScrollPosition().second;
 
     for (; screen_height - getConsoleCursor() - 1 > 0 && row != text_list_->end(); ++row_idx, ++row) {
         int line_number_width = show_line_number_ ? getDigitNumber(text_list_) + 2 : 0;
@@ -42,13 +41,13 @@ int Screen::print() {
                 printLineNumberPadding(line_number_width);
                 ++number_of_wordwrap;
             }
-            if (row_idx == (*cursor_)->getRowIndex() && col_idx == (*cursor_)->getColIndex()) {
+            if (row_idx == cursor->getRowIndex() && col_idx == cursor->getColIndex()) {
                 printf("|");
             } else {
                 printf("%c", *(col));
             }
         }
-        if (row_idx == (*cursor_)->getRowIndex() && col_idx == (*cursor_)->getColIndex()) printf("|");
+        if (row_idx == cursor->getRowIndex() && col_idx == cursor->getColIndex()) printf("|");
 
         printf("\n");
     }

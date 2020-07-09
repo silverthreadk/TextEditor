@@ -5,13 +5,13 @@
 class FileManagerTest : public testing::Test {
  protected:
     void SetUp() {
-        file_manager_ = new FileManager(nullptr, &text_list_);
-    }
-    void TearDown() {
-        delete file_manager_;
+        file_manager_ = std::unique_ptr<FileManager>(new FileManager(nullptr, &text_list_));
     }
 
-    FileManager* file_manager_;
+    void TearDown() {
+    }
+
+    std::unique_ptr<FileManager> file_manager_;
     std::list<std::list<char> > text_list_;
 };
 

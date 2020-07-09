@@ -9,10 +9,10 @@ class Cursor;
 
 class Screen {
  public:
-    Screen(std::list<std::list<char> >* text_list, Cursor** cursor, EDITOR_MODE* mode);
+    Screen(std::list<std::list<char> >* text_list, EDITOR_MODE* mode);
     ~Screen();
 
-    int print();
+    int print(Cursor* cursor);
     void setShowLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
 
  private:
@@ -21,7 +21,6 @@ class Screen {
     void printPadding();
 
     std::list<std::list<char> >* text_list_;
-    Cursor** cursor_;
     EDITOR_MODE* mode_;
     bool show_line_number_;
 };

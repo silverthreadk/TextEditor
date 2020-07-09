@@ -2,6 +2,7 @@
 #define EDITOR_H_
 
 #include <list>
+#include <memory>
 
 #include "editor_enum.h"
 
@@ -170,9 +171,9 @@ class Editor {
     void setShowLineNumber(bool show_line_number);
 
  private:
-    FileManager* file_manager_;
-    Cursor* cursor_;
-    Screen* screen_;
+    std::unique_ptr<FileManager> file_manager_;
+    std::unique_ptr<Cursor> cursor_;
+    std::unique_ptr<Screen> screen_;
     std::list<std::list<char> > text_list_;
     EDITOR_MODE mode_;
 };

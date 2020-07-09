@@ -6,17 +6,15 @@
 class CursorTest : public testing::Test {
  protected:
     void SetUp() {
-        file_manager_ = new FileManager(nullptr, &text_list_);
+        file_manager_ = std::unique_ptr<FileManager>(new FileManager(nullptr, &text_list_));
         file_manager_->edit();
-        cursor_ = new Cursor(text_list_.begin(), (text_list_.begin())->begin());
+        cursor_ = std::unique_ptr<Cursor>(new Cursor(text_list_.begin(), (text_list_.begin())->begin()));
     }
     void TearDown() {
-        delete file_manager_;
-        delete cursor_;
     }
 
-    FileManager* file_manager_;
-    Cursor* cursor_;
+    std::unique_ptr<FileManager> file_manager_;
+    std::unique_ptr<Cursor> cursor_;
     std::list<std::list<char> > text_list_;
 };
 
