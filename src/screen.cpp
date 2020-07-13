@@ -18,10 +18,10 @@ Screen::Screen(std::list<std::list<char> >* text_list, EDITOR_MODE* mode)
 Screen::~Screen() {
 }
 
-int Screen::print(Cursor* cursor) {
+int Screen::print(Cursor* cursor) const {
     clearScreen();
 
-    auto screen_size = getScreenSize();
+    const auto screen_size = getScreenSize();
     const int screen_height = screen_size.first;
     const int screen_width = screen_size.second;
 
@@ -29,7 +29,7 @@ int Screen::print(Cursor* cursor) {
     int row_idx = cursor->getScrollPosition().second;
 
     for (; screen_height - getConsoleCursor() - 1 > 0 && row != text_list_->end(); ++row_idx, ++row) {
-        int line_number_width = show_line_number_ ? getDigitNumber(text_list_) + 2 : 0;
+        const int line_number_width = show_line_number_ ? getDigitNumber(text_list_) + 2 : 0;
         printLineNumber(line_number_width, row_idx);
 
         int col_idx = 0;
@@ -61,19 +61,19 @@ int Screen::print(Cursor* cursor) {
     return 0;
 }
 
-void Screen::printLineNumber(int line_number_width, int row_idx) {
+void Screen::printLineNumber(const int line_number_width, const int row_idx) const {
     if (!show_line_number_) return;
 
     printf("%*d ", line_number_width, row_idx + 1);
 }
 
-void Screen::printLineNumberPadding(int line_number_width) {
+void Screen::printLineNumberPadding(const int line_number_width) const {
     if (!show_line_number_) return;
 
     printf("%*c ", line_number_width, ' ');
 }
 
-void Screen::printPadding() {
+void Screen::printPadding() const {
     const int padding = getScreenSize().first - getConsoleCursor() - 1;
     for (int i = 0; i < padding; ++i)
         printf("~\n");

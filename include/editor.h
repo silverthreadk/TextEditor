@@ -46,7 +46,7 @@ class Editor {
      * Prints the current file.
      * @return          0 if the operation succeeded
      */
-    int printEditor();
+    int printEditor() const;
 
     /**
      * Move the cursor one character to the left
@@ -89,7 +89,7 @@ class Editor {
      * @param n         n th line
      * @return          0 if the operation succeeded
      */
-    int moveCursorToSpecifiedLine(int n);
+    int moveCursorToSpecifiedLine(const int n);
 
     /*
      * Move cursor to the right one word.
@@ -164,11 +164,11 @@ class Editor {
      */
     int deleteToEndOfLine();
 
-    void setMode(EDITOR_MODE mode) { this->mode_ = mode; }
+    void setMode(const EDITOR_MODE mode) { this->mode_ = mode; }
 
-    EDITOR_MODE getMode() { return mode_; }
+    EDITOR_MODE getMode() const { return mode_; }
 
-    void setShowLineNumber(bool show_line_number);
+    void setShowLineNumber(const bool show_line_number);
 
  private:
     std::unique_ptr<FileManager> file_manager_;

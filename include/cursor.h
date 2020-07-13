@@ -51,15 +51,15 @@ class Cursor {
 
     void scrollTo();
 
-    std::list<std::list<char> >::iterator getRow();
+    std::list<std::list<char> >::iterator getRow() const;
 
-    std::list<char>::iterator getCol();
+    std::list<char>::iterator getCol() const;
 
-    int getRowIndex();
+    int getRowIndex() const;
 
-    int getColIndex();
+    int getColIndex() const;
 
-    std::pair<std::list<std::list<char> >::iterator, int> getScrollPosition() {
+    std::pair<std::list<std::list<char> >::iterator, int> getScrollPosition() const {
         return make_pair(scroll_position_, scroll_position_idx_);
     }
 

@@ -8,8 +8,6 @@
 #include <sys/ioctl.h>
 #endif
 
-#include <regex>
-
 void clearScreen() {
 #ifdef WINDOWS
     system("cls");

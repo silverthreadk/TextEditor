@@ -44,7 +44,7 @@ int FileManager::write() {
     FILE *fp;
     if (filepath_ == nullptr || (fp = fopen(filepath_, "w")) == nullptr) return 1;
 
-    Cursor cursor(text_list_->begin(), (text_list_->begin())->begin());
+    Cursor cursor(text_list_->begin(), text_list_->begin()->begin());
     for (cursor.setRow(text_list_->begin()); cursor.getRow() != text_list_->end(); cursor.incRow()) {
         if (cursor.getRow() != text_list_->begin()) putc('\n', fp);
         for (cursor.setCol(cursor.getRow()->begin()); cursor.getCol() != cursor.getRow()->end(); cursor.incCol()) {

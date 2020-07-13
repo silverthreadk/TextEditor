@@ -12,6 +12,7 @@ Cursor::Cursor(std::list<std::list<char> >::iterator row, std::list<char>::itera
     scroll_position_(row),
     scroll_position_idx_(0) {
 }
+
 Cursor::~Cursor() {
 }
 
@@ -102,32 +103,38 @@ void Cursor::scrollTo() {
     scroll_position_ = row_;
     scroll_position_idx_ = row_idx_;
 
-    int offset = row_idx_ - getScreenSize().first - 2;
+    const int offset = row_idx_ - getScreenSize().first - 2;
     for (int i = 0; i < offset; ++i) scrollUp();
 }
 
-std::list<std::list<char> >::iterator Cursor::getRow() {
+std::list<std::list<char> >::iterator Cursor::getRow() const {
     return row_;
 }
-std::list<char>::iterator Cursor::getCol() {
+
+std::list<char>::iterator Cursor::getCol() const {
     return col_;
 }
-int Cursor::getRowIndex() {
+
+int Cursor::getRowIndex() const {
     return row_idx_;
 }
-int Cursor::getColIndex() {
+
+int Cursor::getColIndex() const {
     return col_idx_;
 }
 
 void Cursor::setRow(const std::list<std::list<char> >::iterator r) {
     row_ = r;
 }
+
 void Cursor::setCol(const std::list<char>::iterator c) {
     col_ = c;
 }
+
 void Cursor::setRowIndex(const int idx) {
     row_idx_ = idx;
 }
+
 void Cursor::setColIndex(const int idx) {
     col_idx_ = idx;
 }
@@ -135,12 +142,15 @@ void Cursor::setColIndex(const int idx) {
 void Cursor::incRow() {
     ++row_;
 }
+
 void Cursor::incCol() {
     ++col_;
 }
+
 void Cursor::incRowIndex() {
     ++row_idx_;
 }
+
 void Cursor::incColIndex() {
     ++col_idx_;
 }
@@ -148,12 +158,15 @@ void Cursor::incColIndex() {
 void Cursor::decRow() {
     --row_;
 }
+
 void Cursor::decCol() {
     --col_;
 }
+
 void Cursor::decRowIndex() {
     --row_idx_;
 }
+
 void Cursor::decColIndex() {
     --col_idx_;
 }

@@ -46,7 +46,7 @@ int Editor::writeFile(const char* filepath) {
 }
 
 
-int Editor::printEditor() {
+int Editor::printEditor() const {
     return screen_->print(cursor_.get());
 }
 
@@ -74,7 +74,7 @@ int Editor::moveCursorToEnd() {
     return cursor_->moveToEnd();
 }
 
-int Editor::moveCursorToSpecifiedLine(int n) {
+int Editor::moveCursorToSpecifiedLine(const int n) {
     if (text_list_.size() <= n) {
         cursor_->setRow(std::prev(text_list_.end()));
         cursor_->setRowIndex(text_list_.size() - 1);
@@ -133,7 +133,7 @@ int Editor::insertChar(const char c) {
 }
 
 int Editor::deleteChar() {
-    if ((cursor_->getCol()) == cursor_->getRow()->end()) return 1;
+    if (cursor_->getCol() == cursor_->getRow()->end()) return 1;
 
     cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol()));
 
@@ -212,12 +212,10 @@ int Editor::deleteWordBefore() {
 }
 
 int Editor::insertLine() {
-    std::list<char> temp;
-
     cursor_->scrollDown();
 
     cursor_->incRow();
-    cursor_->setRow(text_list_.insert(cursor_->getRow(), temp));
+    cursor_->setRow(text_list_.insert(cursor_->getRow(), std::list<char>()));
     cursor_->incRowIndex();
 
     cursor_->setCol(cursor_->getRow()->begin());
@@ -229,9 +227,7 @@ int Editor::insertLine() {
 }
 
 int Editor::insertLineBefore() {
-    std::list<char> temp;
-
-    text_list_.insert(cursor_->getRow(), temp);
+    text_list_.insert(cursor_->getRow(), std::list<char>());
     cursor_->incScrollPositionIndex();
     cursor_->incRowIndex();
 
@@ -272,7 +268,7 @@ int Editor::deleteLine() {
 }
 
 int Editor::deleteToBeginningOfLine() {
-    if ((cursor_->getCol()) == cursor_->getRow()->begin()) return 1;
+    if (cursor_->getCol() == cursor_->getRow()->begin()) return 1;
 
     cursor_->getRow()->erase(cursor_->getRow()->begin(), cursor_->getCol());
     cursor_->setColIndex(0);
@@ -281,7 +277,7 @@ int Editor::deleteToBeginningOfLine() {
 }
 
 int Editor::deleteToEndOfLine() {
-    if ((cursor_->getCol()) == cursor_->getRow()->end()) return 1;
+    if (cursor_->getCol() == cursor_->getRow()->end()) return 1;
 
     cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol(), cursor_->getRow()->end()));
     cursor_->setColIndex(cursor_->getRow()->size() - 1);
@@ -289,6 +285,6 @@ int Editor::deleteToEndOfLine() {
     return 0;
 }
 
-void Editor::setShowLineNumber(bool show_line_number) {
-    screen_->setShowLineNumber(show_line_number);;
+void Editor::setShowLineNumber(const bool show_line_number) {
+    screen_->setShowLineNumber(show_line_number);
 }

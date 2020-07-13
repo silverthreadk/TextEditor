@@ -12,13 +12,13 @@ class Screen {
     Screen(std::list<std::list<char> >* text_list, EDITOR_MODE* mode);
     ~Screen();
 
-    int print(Cursor* cursor);
-    void setShowLineNumber(bool show_line_number) { this->show_line_number_ = show_line_number; }
+    int print(Cursor* cursor) const;
+    void setShowLineNumber(const bool show_line_number) { this->show_line_number_ = show_line_number; }
 
  private:
-    void printLineNumber(int line_number_width, int row_idx);
-    void printLineNumberPadding(int line_number_width);
-    void printPadding();
+    void printLineNumber(const int line_number_width, const int row_idx) const;
+    void printLineNumberPadding(const int line_number_width) const;
+    void printPadding() const;
 
     std::list<std::list<char> >* text_list_;
     EDITOR_MODE* mode_;
