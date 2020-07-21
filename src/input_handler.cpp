@@ -180,6 +180,9 @@ void InputHandler::handleInputInCommandMode(Editor* editor, char* prev_ch, std::
         }
         break;
     }
+    case'u': {
+        editor->undo();
+    }
     }
 
     handleArrowKeys(editor, *prev_ch, ch);

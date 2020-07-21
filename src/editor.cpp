@@ -128,6 +128,7 @@ int Editor::moveCursorToLeftOneWord() {
 int Editor::insertChar(const char c) {
     cursor_->setCol(++cursor_->getRow()->insert(cursor_->getCol(), c));
     cursor_->incColIndex();
+    undo_.push(UndoRedoInfo('i', c, cursor_->getRowIndex(), cursor_->getColIndex()));
 
     return 0;
 }
@@ -281,6 +282,24 @@ int Editor::deleteToEndOfLine() {
 
     cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol(), cursor_->getRow()->end()));
     cursor_->setColIndex(cursor_->getRow()->size() - 1);
+
+    return 0;
+}
+
+int Editor::undo() {
+    if (undo_.empty()) return 1;
+
+    auto undo_info = undo_.top();
+
+    if (undo_info.command == 'i') {
+        moveCursorToSpecifiedLine(undo_info.row);
+        for (int i = cursor_->getColIndex(); i < undo_info.col; ++i) {
+            moveCursorToRight();
+        }
+        deleteCharBefore();
+    }
+
+    undo_.pop();
 
     return 0;
 }

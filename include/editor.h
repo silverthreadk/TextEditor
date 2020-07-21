@@ -3,8 +3,10 @@
 
 #include <list>
 #include <memory>
+#include <stack>
 
 #include "editor_enum.h"
+#include "undo_redo_info.h"
 
 class FileManager;
 class Cursor;
@@ -164,6 +166,12 @@ class Editor {
      */
     int deleteToEndOfLine();
 
+    /*
+     * Undo last change
+     * @return          0 if the operation succeeded
+     */
+    int undo();
+
     void setMode(const EDITOR_MODE mode) { this->mode_ = mode; }
 
     EDITOR_MODE getMode() const { return mode_; }
@@ -175,6 +183,7 @@ class Editor {
     std::unique_ptr<Cursor> cursor_;
     std::unique_ptr<Screen> screen_;
     std::list<std::list<char> > text_list_;
+    std::stack<UndoRedoInfo> undo_;
     EDITOR_MODE mode_;
 };
 
