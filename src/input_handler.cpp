@@ -207,6 +207,7 @@ void InputHandler::handleInputInInsertMode(Editor* editor, char* prev_ch) {
 
     if (*prev_ch == -32) {
         handleArrowKeys(editor, *prev_ch, ch);
+        *prev_ch = ch;
         return;
     }
 
