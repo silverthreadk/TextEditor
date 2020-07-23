@@ -5,6 +5,7 @@ enum class EDITOR_MODE {
     COMMAND = 0,
     INSERT,
     LAST_LINE,
+    UNDO_REDO,
     END
 };
 
