@@ -130,7 +130,8 @@ int Editor::insertChar(const char c) {
     cursor_->incColIndex();
 
     if (mode_ != EDITOR_MODE::UNDO_REDO) {
-        undo_.push(UndoRedoInfo('i', c, cursor_->getRowIndex(), cursor_->getColIndex()));
+        undo_.push_back(UndoRedoInfo('i', c, cursor_->getRowIndex(), cursor_->getColIndex()));
+        redo_.clear();
     }
 
     return 0;
@@ -143,7 +144,8 @@ int Editor::deleteChar() {
     cursor_->setCol(cursor_->getRow()->erase(cursor_->getCol()));
 
     if (mode_ != EDITOR_MODE::UNDO_REDO) {
-        undo_.push(UndoRedoInfo('d', ch, cursor_->getRowIndex(), cursor_->getColIndex()));
+        undo_.push_back(UndoRedoInfo('d', ch, cursor_->getRowIndex(), cursor_->getColIndex()));
+        redo_.clear();
     }
 
     return 0;
@@ -297,7 +299,7 @@ int Editor::deleteToEndOfLine() {
 int Editor::undo() {
     if (undo_.empty()) return 1;
     mode_ = EDITOR_MODE::UNDO_REDO;
-    auto undo_info = undo_.top();
+    auto undo_info = undo_.back();
 
     if (undo_info.command == 'i') {
         moveCursorToSpecifiedLine(undo_info.row);
@@ -313,7 +315,34 @@ int Editor::undo() {
         insertChar(undo_info.ch);
     }
 
-    undo_.pop();
+    redo_.push_back(undo_info);
+    undo_.pop_back();
+
+    mode_ = EDITOR_MODE::COMMAND;
+    return 0;
+}
+
+int Editor::redo() {
+    if (redo_.empty()) return 1;
+    mode_ = EDITOR_MODE::UNDO_REDO;
+    auto redo_info = redo_.back();
+
+    if (redo_info.command == 'i') {
+        moveCursorToSpecifiedLine(redo_info.row);
+        for (int i = cursor_->getColIndex(); i < redo_info.col; ++i) {
+            moveCursorToRight();
+        }
+        insertChar(redo_info.ch);
+    } else if (redo_info.command == 'd') {
+        moveCursorToSpecifiedLine(redo_info.row);
+        for (int i = cursor_->getColIndex(); i < redo_info.col; ++i) {
+            moveCursorToRight();
+        }
+        deleteCharBefore();
+    }
+
+    undo_.push_back(redo_info);
+    redo_.pop_back();
 
     mode_ = EDITOR_MODE::COMMAND;
     return 0;

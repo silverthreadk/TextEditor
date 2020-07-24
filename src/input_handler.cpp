@@ -180,8 +180,13 @@ void InputHandler::handleInputInCommandMode(Editor* editor, char* prev_ch, std::
         }
         break;
     }
-    case'u': {
+    case 'u': {
         editor->undo();
+        break;
+    }
+    case 20: {
+        editor->redo();
+        break;
     }
     }
 
